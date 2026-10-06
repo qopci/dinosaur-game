@@ -45,8 +45,8 @@
 .cactus {
   position: absolute;
   bottom: 42px;
-  right: 150px;
-  width: 16px;
+  left: 750px;
+  width: 10px;
   height: 45px;
   background-color: #535353;
 }
@@ -54,19 +54,36 @@
 .cactus::before {
   content: '';
   position: absolute;
-  left: -12px;
+  left: -8px;
   top: 15px;
-  width: 12px;
-  height: 8px;
+  width: 8px;
+  height: 7px;
   background-color: #535353;
 }
 
 .cactus::after {
   content: '';
   position: absolute;
-  right: -12px;
+  right: -8px;
   top: 8px;
-  width: 12px;
-  height: 8px;
+  width: 8px;
+  height: 7px;
   background-color: #535353;
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: monospace;
+  font-size: 28px;
+  font-weight: bold;
+  color: #535353;
+}
+
+.restart {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: normal;
 }

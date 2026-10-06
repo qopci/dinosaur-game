@@ -2,7 +2,7 @@ function Cactus({ position }) {
   return (
     <div
       className="cactus"
-      style={{ right: `${position}px` }}
+      style={{ left: `${position}px` }}
     ></div>
   );
 }

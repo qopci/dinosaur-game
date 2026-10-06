@@ -6,7 +6,10 @@ function Dino() {
 
   useEffect(() => {
     function handleKeyDown(event) {
-      if (event.code === 'Space' && !isJumping) {
+      if (
+        (event.code === 'Space' || event.code === 'ArrowUp') &&
+        !isJumping
+      ) {
         setIsJumping(true);
       }
     }
@@ -22,23 +25,18 @@ function Dino() {
     if (!isJumping) return;
 
     let height = 0;
-    let goingUp = true;
+    let velocity = 18;
 
     const jump = setInterval(() => {
-      if (goingUp) {
-        height += 10;
+      height += velocity;
+      velocity -= 1.5;
 
-        if (height >= 100) {
-          goingUp = false;
-        }
-      } else {
-        height -= 10;
-
-        if (height <= 0) {
-          height = 0;
-          setIsJumping(false);
-          clearInterval(jump);
-        }
+      if (height <= 0) {
+        height = 0;
+        setJumpHeight(0);
+        setIsJumping(false);
+        clearInterval(jump);
+        return;
       }
 
       setJumpHeight(height);
