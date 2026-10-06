@@ -14,6 +14,25 @@
   overflow: hidden;
 }
 
+.score {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-family: monospace;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #535353;
+}
+
+.dino {
+  position: absolute;
+  bottom: 42px;
+  left: 100px;
+  width: 60px;
+  height: auto;
+  image-rendering: pixelated;
+}
+
 .ground {
   position: absolute;
   bottom: 40px;
