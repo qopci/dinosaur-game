@@ -1,6 +1,18 @@
+import { useEffect, useState } from 'react';
 import './App.css';
+import Cactus from './components/Cactus';
 
 function App() {
+  const [cactusPosition, setCactusPosition] = useState(150);
+
+  useEffect(() => {
+    const gameLoop = setInterval(() => {
+      setCactusPosition((position) => position - 5);
+    }, 50);
+
+    return () => clearInterval(gameLoop);
+  }, []);
+
   return (
     <main className="page">
       <div className="game">
@@ -11,6 +23,8 @@ function App() {
           src="/dino-icon.png"
           alt="Dinosaur"
         />
+
+        <Cactus position={cactusPosition} />
 
         <div className="ground"></div>
       </div>
