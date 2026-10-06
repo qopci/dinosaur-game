@@ -47,10 +47,10 @@ function Dino() {
 
   return (
     <img
-      className="dino"
+      className={`dino ${isJumping ? 'dino-jumping' : 'dino-running'}`}
       src="/dino-icon.png"
       alt="Dinosaur"
-      style={{ bottom: `${42 + jumpHeight}px` }}
+      style={{ bottom: `${33 + jumpHeight}px` }}
     />
   );
 }

@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Cactus from './components/Cactus';
 import Dino from './components/Dino';
+import Cloud from './components/Cloud';
+import Bird from './components/Bird';
 
 function App() {
   const [cactusPosition, setCactusPosition] = useState(750);
+  const [cloudPosition, setCloudPosition] = useState(600);
+  const [birdPosition, setBirdPosition] = useState(950);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -24,6 +28,40 @@ function App() {
     }, 50);
 
     return () => clearInterval(gameLoop);
+  }, [gameOver]);
+
+  // Move cloud from right to left
+  useEffect(() => {
+    if (gameOver) return;
+
+    const cloudLoop = setInterval(() => {
+      setCloudPosition((position) => {
+        if (position < -100) {
+          return 900;
+        }
+
+        return position - 1;
+      });
+    }, 50);
+
+    return () => clearInterval(cloudLoop);
+  }, [gameOver]);
+
+  // Move bird from right to left
+  useEffect(() => {
+    if (gameOver) return;
+
+    const birdLoop = setInterval(() => {
+      setBirdPosition((position) => {
+        if (position < -60) {
+          return 950;
+        }
+
+        return position - 5;
+      });
+    }, 50);
+
+    return () => clearInterval(birdLoop);
   }, [gameOver]);
 
   // Increase score and update high score
@@ -77,6 +115,8 @@ function App() {
     function handleRestart(event) {
       if (event.code === 'Space' && gameOver) {
         setCactusPosition(750);
+        setCloudPosition(600);
+        setBirdPosition(950);
         setScore(0);
         setGameOver(false);
       }
@@ -97,9 +137,16 @@ function App() {
           {String(score).padStart(5, '0')}
         </div>
 
+        <Cloud position={cloudPosition} top={50} />
+
         <Dino />
 
         <Cactus position={cactusPosition} />
+
+        <Bird
+          position={birdPosition}
+          gameOver={gameOver}
+        />
 
         <div className="ground"></div>
 
