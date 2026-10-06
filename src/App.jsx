@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Cactus from './components/Cactus';
+import Dino from './components/Dino';
 
 function App() {
   const [cactusPosition, setCactusPosition] = useState(150);
 
   useEffect(() => {
     const gameLoop = setInterval(() => {
-      setCactusPosition((position) => position - 5);
+      setCactusPosition((position) => {
+        if (position < -50) {
+          return 900;
+        }
+
+        return position - 5;
+      });
     }, 50);
 
     return () => clearInterval(gameLoop);
@@ -18,11 +25,7 @@ function App() {
       <div className="game">
         <div className="score">HI 00000&nbsp;&nbsp;00000</div>
 
-        <img
-          className="dino"
-          src="/dino-icon.png"
-          alt="Dinosaur"
-        />
+        <Dino />
 
         <Cactus position={cactusPosition} />
 
