@@ -31,6 +31,12 @@ function App() {
 
   const [darkMode, setDarkMode] = useState(false);
 
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  const [colorMode, setColorMode] = useState(false);
+
+  const [weather, setWeather] = useState('clear');
+
 
   const obstacleId = useRef(0);
   const cloudId = useRef(0);
@@ -40,6 +46,131 @@ function App() {
   const scoreRef = useRef(0);
 
   const spawnTimer = useRef(0);
+
+  const audioContextRef = useRef(null);
+
+
+  /* ========================================
+     SOUND
+  ======================================== */
+
+  function getAudioContext() {
+
+    if (!audioContextRef.current) {
+
+      audioContextRef.current =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
+
+    return audioContextRef.current;
+
+  }
+
+
+  function playDeathSound() {
+
+    if (!soundEnabled) {
+
+      return;
+
+    }
+
+
+    const audioContext =
+      getAudioContext();
+
+
+    if (
+      audioContext.state === 'suspended'
+    ) {
+
+      audioContext.resume();
+
+    }
+
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+
+    oscillator.type = 'square';
+
+
+    oscillator.frequency.setValueAtTime(
+      220,
+      audioContext.currentTime
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      80,
+      audioContext.currentTime + 0.35
+    );
+
+
+    gain.gain.setValueAtTime(
+      0.12,
+      audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.35
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+      audioContext.currentTime + 0.35
+    );
+
+  }
+
+
+  /* ========================================
+     WEATHER
+  ======================================== */
+
+  function cycleWeather() {
+
+    setWeather(
+      (currentWeather) => {
+
+        if (currentWeather === 'clear') {
+
+          return 'rain';
+
+        }
+
+        if (currentWeather === 'rain') {
+
+          return 'sunny';
+
+        }
+
+        return 'clear';
+
+      }
+    );
+
+  }
 
 
   /* ========================================
@@ -139,9 +270,7 @@ function App() {
        0 - 100
     ======================================== */
 
-    if (
-      currentScore < 100
-    ) {
+    if (currentScore < 100) {
 
       patterns = [
         'singleCactus',
@@ -158,9 +287,7 @@ function App() {
        100 - 200
     ======================================== */
 
-    else if (
-      currentScore < 200
-    ) {
+    else if (currentScore < 200) {
 
       patterns = [
         'singleCactus',
@@ -177,9 +304,7 @@ function App() {
        200 - 300
     ======================================== */
 
-    else if (
-      currentScore < 300
-    ) {
+    else if (currentScore < 300) {
 
       patterns = [
         'singleCactus',
@@ -197,9 +322,7 @@ function App() {
        300 - 500
     ======================================== */
 
-    else if (
-      currentScore < 500
-    ) {
+    else if (currentScore < 500) {
 
       patterns = [
         'singleCactus',
@@ -219,9 +342,7 @@ function App() {
        500 - 700
     ======================================== */
 
-    else if (
-      currentScore < 700
-    ) {
+    else if (currentScore < 700) {
 
       patterns = [
         'singleCactus',
@@ -241,9 +362,7 @@ function App() {
        700 - 850
     ======================================== */
 
-    else if (
-      currentScore < 850
-    ) {
+    else if (currentScore < 850) {
 
       patterns = [
         'singleCactus',
@@ -264,9 +383,7 @@ function App() {
        850 - 1000
     ======================================== */
 
-    else if (
-      currentScore < 1000
-    ) {
+    else if (currentScore < 1000) {
 
       patterns = [
         'singleCactus',
@@ -419,8 +536,6 @@ function App() {
     );
 
 
-    /* Starting obstacles */
-
     const startingObstacles = [];
 
     let startX = 1000;
@@ -448,8 +563,6 @@ function App() {
 
     }
 
-
-    /* Starting clouds */
 
     const startingClouds = [];
 
@@ -547,8 +660,6 @@ function App() {
       }
 
 
-      /* Start */
-
       if (
         event.code === 'Enter' &&
         !gameStarted &&
@@ -562,8 +673,6 @@ function App() {
       }
 
 
-      /* Restart */
-
       if (
         event.code === 'Enter' &&
         gameOver
@@ -575,8 +684,6 @@ function App() {
 
       }
 
-
-      /* Crouch */
 
       if (
         event.code === 'ArrowDown' &&
@@ -760,128 +867,71 @@ function App() {
         let spawnDelay;
 
 
-        /* 0 - 100 */
-
-        if (
-          currentScore < 100
-        ) {
+        if (currentScore < 100) {
 
           spawnDelay = 2400;
 
         }
 
-
-        /* 100 - 200 */
-
-        else if (
-          currentScore < 200
-        ) {
+        else if (currentScore < 200) {
 
           spawnDelay = 2100;
 
         }
 
-
-        /* 200 - 300 */
-
-        else if (
-          currentScore < 300
-        ) {
+        else if (currentScore < 300) {
 
           spawnDelay = 1600;
 
         }
 
-
-        /* 300 - 500 */
-
-        else if (
-          currentScore < 500
-        ) {
+        else if (currentScore < 500) {
 
           spawnDelay = 1450;
 
         }
 
-
-        /* 500 - 600 */
-
-        else if (
-          currentScore < 600
-        ) {
+        else if (currentScore < 600) {
 
           spawnDelay = 1250;
 
         }
 
-
-        /* 600 - 700 */
-
-        else if (
-          currentScore < 700
-        ) {
+        else if (currentScore < 700) {
 
           spawnDelay = 1150;
 
         }
 
-
-        /* 700 - 800 */
-
-        else if (
-          currentScore < 800
-        ) {
+        else if (currentScore < 800) {
 
           spawnDelay = 1050;
 
         }
 
-
-        /* 800 - 900 */
-
-        else if (
-          currentScore < 900
-        ) {
+        else if (currentScore < 900) {
 
           spawnDelay = 950;
 
         }
 
-
-        /* 900 - 1000 */
-
-        else if (
-          currentScore < 1000
-        ) {
+        else if (currentScore < 1000) {
 
           spawnDelay = 875;
 
         }
 
-
-        /* 1000 - 1200 */
-
-        else if (
-          currentScore < 1200
-        ) {
+        else if (currentScore < 1200) {
 
           spawnDelay = 800;
 
         }
 
-
-        /* 1200 - 1500 */
-
-        else if (
-          currentScore < 1500
-        ) {
+        else if (currentScore < 1500) {
 
           spawnDelay = 750;
 
         }
-
-
-        /* 1500+ */
 
         else {
 
@@ -922,9 +972,7 @@ function App() {
 
     return () => {
 
-      clearInterval(
-        spawn
-      );
+      clearInterval(spawn);
 
     };
 
@@ -1106,6 +1154,21 @@ function App() {
 
 
   /* ========================================
+     DEATH SOUND
+  ======================================== */
+
+  useEffect(() => {
+
+    if (gameOver) {
+
+      playDeathSound();
+
+    }
+
+  }, [gameOver]);
+
+
+  /* ========================================
      COLLISION
   ======================================== */
 
@@ -1242,23 +1305,26 @@ function App() {
   return (
 
     <div
-      className={
-        `page ${
-          darkMode
-            ? 'dark-mode'
-            : ''
-        }`
-      }
+      className={`
+        page
+        ${darkMode ? 'dark-mode' : ''}
+        ${colorMode ? 'color-mode' : ''}
+        ${gameOver ? 'game-over-active' : ''}
+        weather-${weather}
+      `}
     >
 
 
-      {/* HEADER */}
+      {/* ========================================
+          HEADER
+      ======================================== */}
 
       <header className="game-header">
 
         <h1>
           Dinosaur Game - Chrome
         </h1>
+
 
         <p className="controls">
 
@@ -1280,8 +1346,6 @@ function App() {
 
         </p>
 
-
-        {/* DARK MODE */}
 
         <button
           type="button"
@@ -1305,30 +1369,81 @@ function App() {
       </header>
 
 
-      {/* GAME */}
+      {/* ========================================
+          GAME
+      ======================================== */}
 
       <main className="game-container">
 
         <div className="game">
 
 
+          {/* WEATHER */}
+
+          {weather === 'sunny' && (
+
+            <div className="sun">
+
+              <div className="sun-rays"></div>
+
+            </div>
+
+          )}
+
+
+          {weather === 'rain' && (
+
+            <div className="rain-layer">
+
+              {Array.from({
+                length: 70,
+              }).map(
+                (_, index) => (
+
+                  <span
+                    key={index}
+                    className="rain-drop"
+                    style={{
+                      left:
+                        `${(index * 37) % 100}%`,
+
+                      animationDelay:
+                        `${(index * 0.13) % 1.5}s`,
+
+                      animationDuration:
+                        `${0.55 + ((index * 7) % 5) * 0.1}s`,
+                    }}
+                  />
+
+                )
+              )}
+
+            </div>
+
+          )}
+
+
           {/* CLOUDS */}
 
-          <div className="cloud-layer">
+          {weather !== 'sunny' && (
 
-            {clouds.map(
-              (cloud) => (
+            <div className="cloud-layer">
 
-                <Cloud
-                  key={cloud.id}
-                  position={cloud.position}
-                  top={cloud.top}
-                />
+              {clouds.map(
+                (cloud) => (
 
-              )
-            )}
+                  <Cloud
+                    key={cloud.id}
+                    position={cloud.position}
+                    top={cloud.top}
+                  />
 
-          </div>
+                )
+              )}
+
+            </div>
+
+          )}
 
 
           {/* SCORE */}
@@ -1362,10 +1477,10 @@ function App() {
 
             <Dino
               gameOver={gameOver}
-              isCrouching={
-                isCrouching
-              }
+              isCrouching={isCrouching}
               reset={dinoReset}
+              soundEnabled={soundEnabled}
+              getAudioContext={getAudioContext}
             />
 
           )}
@@ -1384,12 +1499,8 @@ function App() {
                 return (
 
                   <Cactus
-                    key={
-                      obstacle.id
-                    }
-                    position={
-                      obstacle.position
-                    }
+                    key={obstacle.id}
+                    position={obstacle.position}
                   />
 
                 );
@@ -1405,18 +1516,10 @@ function App() {
                 return (
 
                   <Bird
-                    key={
-                      obstacle.id
-                    }
-                    position={
-                      obstacle.position
-                    }
-                    top={
-                      obstacle.height
-                    }
-                    gameOver={
-                      gameOver
-                    }
+                    key={obstacle.id}
+                    position={obstacle.position}
+                    top={obstacle.height}
+                    gameOver={gameOver}
                   />
 
                 );
@@ -1493,6 +1596,80 @@ function App() {
             <div className="ground"></div>
 
           )}
+
+        </div>
+
+
+        {/* ========================================
+            GAME CONTROLS
+        ======================================== */}
+
+        <div className="game-controls">
+
+
+          {/* SOUND */}
+
+          <button
+            type="button"
+            className="sound-button"
+            onMouseDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={() =>
+              setSoundEnabled(
+                (current) => !current
+              )
+            }
+          >
+
+            {soundEnabled
+              ? '🔊 SOUND ON'
+              : '🔇 MUTED'}
+
+          </button>
+
+
+          {/* COLOR */}
+
+          <button
+            type="button"
+            className="color-mode-button"
+            onMouseDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={() =>
+              setColorMode(
+                (current) => !current
+              )
+            }
+          >
+
+            {colorMode
+              ? '🌑 CLASSIC'
+              : '🎨 COLOR'}
+
+          </button>
+
+
+          {/* WEATHER */}
+
+          <button
+            type="button"
+            className="weather-button"
+            onMouseDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={cycleWeather}
+          >
+
+            {weather === 'clear'
+              ? '☁️ CLEAR'
+              : weather === 'rain'
+                ? '🌧️ RAIN'
+                : '☀️ SUNNY'}
+
+          </button>
+
 
         </div>
 

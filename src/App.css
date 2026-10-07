@@ -141,6 +141,185 @@
 
 
 /* ========================================
+   SUN
+======================================== */
+
+.sun {
+  position: absolute;
+
+  top: 58px;
+  left: 50%;
+
+  width: 38px;
+  height: 38px;
+
+  transform: translateX(-50%);
+
+  z-index: 0;
+
+  border-radius: 50%;
+
+  background-color: #535353;
+
+  color: #535353;
+}
+
+.sun-rays {
+  position: absolute;
+
+  inset: -16px;
+
+  /*
+     Equal horizontal and vertical rays.
+     8% makes them thicker than the previous
+     thin version while keeping them clean.
+  */
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 46%,
+      currentColor 46%,
+      currentColor 54%,
+      transparent 54%
+    ),
+    linear-gradient(
+      to right,
+      transparent 46%,
+      currentColor 46%,
+      currentColor 54%,
+      transparent 54%
+    );
+
+  transform: rotate(45deg);
+
+  animation:
+    sunRotate
+    8s
+    linear
+    infinite;
+}
+
+@keyframes sunRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* ========================================
+   RAIN
+======================================== */
+
+.rain-layer {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+.rain-drop {
+  position: absolute;
+
+  top: -35px;
+
+  width: 2px;
+  height: 18px;
+
+  background-color: #535353;
+
+  opacity: 0.8;
+
+  transform: rotate(12deg);
+
+  animation:
+    rainFall
+    linear
+    infinite;
+}
+
+@keyframes rainFall {
+
+  from {
+    transform:
+      translateY(-35px)
+      rotate(12deg);
+  }
+
+  to {
+    transform:
+      translateY(370px)
+      rotate(12deg);
+  }
+
+}
+
+
+/* ========================================
+   WEATHER - DARK MODE
+======================================== */
+
+.dark-mode .sun {
+  background-color: #e8eaed;
+
+  color: #e8eaed;
+}
+
+.dark-mode .rain-drop {
+  background-color: #e8eaed;
+}
+
+
+/* ========================================
+   WEATHER - COLOR MODE
+======================================== */
+
+.color-mode .sun {
+  background-color: #f5c542;
+
+  color: #f5c542;
+}
+
+.color-mode .rain-drop {
+  background-color: #7db9e8;
+}
+
+
+/* ========================================
+   WEATHER - COLOR + DARK MODE
+======================================== */
+
+.dark-mode.color-mode .sun {
+  background-color: #f5c542;
+
+  color: #f5c542;
+}
+
+.dark-mode.color-mode .rain-drop {
+  background-color: #4f82ad;
+}
+
+
+/* ========================================
+   FREEZE WEATHER ON GAME OVER
+======================================== */
+
+.game-over-active .sun-rays,
+.game-over-active .rain-drop {
+  animation-play-state: paused;
+}
+
+
+/* ========================================
    CLOUDS
 ======================================== */
 
@@ -237,7 +416,8 @@
 
   transition:
     opacity 0.12s ease,
-    transform 0.12s ease;
+    transform 0.12s ease,
+    filter 0.2s ease;
 }
 
 .dino-image:not(.dino-crouch-image) {
@@ -275,6 +455,7 @@
 }
 
 @keyframes dinoRun {
+
   from {
     transform: translateY(0);
   }
@@ -282,6 +463,7 @@
   to {
     transform: translateY(-2px);
   }
+
 }
 
 
@@ -415,6 +597,7 @@
 }
 
 @keyframes flap {
+
   from {
     transform: rotate(0deg);
   }
@@ -422,6 +605,7 @@
   to {
     transform: rotate(35deg);
   }
+
 }
 
 .bird-stopped .bird-wing {
@@ -590,6 +774,128 @@
 
 
 /* ========================================
+   GAME CONTROLS
+======================================== */
+
+.game-controls {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+
+/* ========================================
+   SOUND BUTTON
+======================================== */
+
+.sound-button {
+  padding: 8px 16px;
+
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+
+  color: #535353;
+
+  background-color: white;
+
+  border: 1px solid #aaa;
+  border-radius: 3px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sound-button:hover {
+  background-color: #f5f5f5;
+}
+
+.sound-button:active {
+  background-color: #eeeeee;
+}
+
+
+/* ========================================
+   COLOR MODE BUTTON
+======================================== */
+
+.color-mode-button {
+  padding: 8px 16px;
+
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+
+  color: #535353;
+
+  background-color: white;
+
+  border: 1px solid #aaa;
+  border-radius: 3px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.color-mode-button:hover {
+  background-color: #f5f5f5;
+}
+
+.color-mode-button:active {
+  background-color: #eeeeee;
+}
+
+
+/* ========================================
+   WEATHER BUTTON
+======================================== */
+
+.weather-button {
+  padding: 8px 16px;
+
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+
+  color: #535353;
+
+  background-color: white;
+
+  border: 1px solid #aaa;
+  border-radius: 3px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.weather-button:hover {
+  background-color: #f5f5f5;
+}
+
+.weather-button:active {
+  background-color: #eeeeee;
+}
+
+
+/* ========================================
    DARK MODE
 ======================================== */
 
@@ -622,7 +928,9 @@
 }
 
 
-/* Clouds */
+/* ========================================
+   DARK MODE CLOUDS
+======================================== */
 
 .dark-mode .cloud {
   background-color: #3c4043;
@@ -634,14 +942,18 @@
 }
 
 
-/* Dino */
+/* ========================================
+   DARK MODE DINO
+======================================== */
 
 .dark-mode .dino-image {
   filter: brightness(0) invert(1);
 }
 
 
-/* Cactus */
+/* ========================================
+   DARK MODE CACTUS
+======================================== */
 
 .dark-mode .cactus {
   background-color: #e8eaed;
@@ -653,7 +965,9 @@
 }
 
 
-/* Birds */
+/* ========================================
+   DARK MODE BIRDS
+======================================== */
 
 .dark-mode .bird-body,
 .dark-mode .bird-head,
@@ -664,7 +978,9 @@
 }
 
 
-/* Ground */
+/* ========================================
+   DARK MODE GROUND
+======================================== */
 
 .dark-mode .ground {
   background-color: #202124;
@@ -673,7 +989,9 @@
 }
 
 
-/* Dark mode button */
+/* ========================================
+   DARK MODE BUTTON
+======================================== */
 
 .dark-mode .dark-mode-button {
   color: #e8eaed;
@@ -692,7 +1010,9 @@
 }
 
 
-/* Start screen */
+/* ========================================
+   DARK MODE START SCREEN
+======================================== */
 
 .dark-mode .start-screen {
   color: #e8eaed;
@@ -719,7 +1039,9 @@
 }
 
 
-/* Game over */
+/* ========================================
+   DARK MODE GAME OVER
+======================================== */
 
 .dark-mode .game-over {
   background: rgba(
@@ -752,6 +1074,187 @@
 
 .dark-mode .restart-hint {
   color: #9aa0a6;
+}
+
+
+/* ========================================
+   DARK MODE SOUND BUTTON
+======================================== */
+
+.dark-mode .sound-button {
+  color: #e8eaed;
+
+  background-color: #202124;
+
+  border-color: #777;
+}
+
+.dark-mode .sound-button:hover {
+  background-color: #303134;
+}
+
+.dark-mode .sound-button:active {
+  background-color: #3c4043;
+}
+
+
+/* ========================================
+   DARK MODE COLOR BUTTON
+======================================== */
+
+.dark-mode .color-mode-button {
+  color: #e8eaed;
+
+  background-color: #202124;
+
+  border-color: #777;
+}
+
+.dark-mode .color-mode-button:hover {
+  background-color: #303134;
+}
+
+.dark-mode .color-mode-button:active {
+  background-color: #3c4043;
+}
+
+
+/* ========================================
+   DARK MODE WEATHER BUTTON
+======================================== */
+
+.dark-mode .weather-button {
+  color: #e8eaed;
+
+  background-color: #202124;
+
+  border-color: #777;
+}
+
+.dark-mode .weather-button:hover {
+  background-color: #303134;
+}
+
+.dark-mode .weather-button:active {
+  background-color: #3c4043;
+}
+
+
+/* ========================================
+   COLOR MODE
+======================================== */
+
+
+/* ========================================
+   PINK DINO
+======================================== */
+
+.color-mode .dino-image {
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(55%)
+    sepia(35%)
+    saturate(1500%)
+    hue-rotate(290deg)
+    brightness(90%)
+    contrast(105%);
+}
+
+
+/* ========================================
+   GREEN CACTUS
+======================================== */
+
+.color-mode .cactus {
+  background-color: #39a852;
+}
+
+.color-mode .cactus::before,
+.color-mode .cactus::after {
+  background-color: #39a852;
+}
+
+
+/* ========================================
+   BLUE CLOUDS
+======================================== */
+
+.color-mode .cloud {
+  background-color: #7db9e8;
+}
+
+.color-mode .cloud::before,
+.color-mode .cloud::after {
+  background-color: #7db9e8;
+}
+
+
+/* ========================================
+   BROWN BIRDS
+======================================== */
+
+.color-mode .bird-body,
+.color-mode .bird-head,
+.color-mode .bird-beak,
+.color-mode .bird-wing,
+.color-mode .bird-tail {
+  background-color: #b8895b;
+}
+
+
+/* ========================================
+   COLOR MODE + DARK MODE
+======================================== */
+
+
+/* Pink dino */
+
+.dark-mode.color-mode .dino-image {
+  filter:
+    brightness(0)
+    saturate(100%)
+    invert(55%)
+    sepia(35%)
+    saturate(1500%)
+    hue-rotate(290deg)
+    brightness(90%)
+    contrast(105%);
+}
+
+
+/* Green cactus */
+
+.dark-mode.color-mode .cactus {
+  background-color: #39a852;
+}
+
+.dark-mode.color-mode .cactus::before,
+.dark-mode.color-mode .cactus::after {
+  background-color: #39a852;
+}
+
+
+/* Darker blue clouds */
+
+.dark-mode.color-mode .cloud {
+  background-color: #4f82ad;
+}
+
+.dark-mode.color-mode .cloud::before,
+.dark-mode.color-mode .cloud::after {
+  background-color: #4f82ad;
+}
+
+
+/* Brown birds */
+
+.dark-mode.color-mode .bird-body,
+.dark-mode.color-mode .bird-head,
+.dark-mode.color-mode .bird-beak,
+.dark-mode.color-mode .bird-wing,
+.dark-mode.color-mode .bird-tail {
+  background-color: #b8895b;
 }
 
 

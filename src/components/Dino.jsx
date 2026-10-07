@@ -9,12 +9,94 @@ function Dino({
   gameOver,
   isCrouching,
   reset,
+  soundEnabled,
+  getAudioContext,
 }) {
 
-  const [isJumping, setIsJumping] = useState(false);
-  const [jumpHeight, setJumpHeight] = useState(0);
+  const [isJumping, setIsJumping] =
+    useState(false);
 
-  const isJumpingRef = useRef(false);
+  const [jumpHeight, setJumpHeight] =
+    useState(0);
+
+  const isJumpingRef =
+    useRef(false);
+
+
+  /* ========================================
+     JUMP SOUND
+  ======================================== */
+
+  function playJumpSound() {
+
+    if (!soundEnabled) {
+
+      return;
+
+    }
+
+
+    const audioContext =
+      getAudioContext();
+
+
+    if (
+      audioContext.state === 'suspended'
+    ) {
+
+      audioContext.resume();
+
+    }
+
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+
+    oscillator.type = 'square';
+
+
+    oscillator.frequency.setValueAtTime(
+      520,
+      audioContext.currentTime
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+      760,
+      audioContext.currentTime + 0.12
+    );
+
+
+    gain.gain.setValueAtTime(
+      0.08,
+      audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.12
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+
+    oscillator.start();
+
+    oscillator.stop(
+      audioContext.currentTime + 0.12
+    );
+
+  }
 
 
   /* ========================================
@@ -52,6 +134,8 @@ function Dino({
 
       setIsJumping(true);
 
+      playJumpSound();
+
     }
 
 
@@ -70,11 +154,14 @@ function Dino({
 
     };
 
-  }, [gameOver]);
+  }, [
+    gameOver,
+    soundEnabled,
+  ]);
 
 
   /* ========================================
-     JUMP PHYSICS
+     JUMP MOVEMENT
   ======================================== */
 
   useEffect(() => {
@@ -106,13 +193,11 @@ function Dino({
 
           height = 0;
 
-
           setJumpHeight(0);
 
           setIsJumping(false);
 
           isJumpingRef.current = false;
-
 
           clearInterval(jump);
 
@@ -139,7 +224,12 @@ function Dino({
 
 
   /* ========================================
-     STOP JUMPING ON GAME OVER
+     GAME OVER
+     
+     IMPORTANT:
+     Do NOT reset jumpHeight here.
+     This keeps the dino exactly where
+     it was when it collided.
   ======================================== */
 
   useEffect(() => {
@@ -148,19 +238,15 @@ function Dino({
 
       setIsJumping(false);
 
-      setJumpHeight(0);
-
       isJumpingRef.current = false;
 
     }
 
-  }, [
-    gameOver,
-  ]);
+  }, [gameOver]);
 
 
   /* ========================================
-     RESET DINO POSITION
+     RESET DINO
   ======================================== */
 
   useEffect(() => {
@@ -171,13 +257,11 @@ function Dino({
 
     isJumpingRef.current = false;
 
-  }, [
-    reset,
-  ]);
+  }, [reset]);
 
 
   /* ========================================
-     NORMAL DINO
+     DINO CLASSES
   ======================================== */
 
   const normalDinoClass = `
@@ -193,10 +277,6 @@ function Dino({
     }
   `;
 
-
-  /* ========================================
-     CROUCHING DINO
-  ======================================== */
 
   const crouchDinoClass = `
     dino-image
