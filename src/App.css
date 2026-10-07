@@ -4,19 +4,14 @@
 
 .page {
   min-height: 100vh;
-
   background-color: white;
-
   color: #535353;
-
   overflow-x: hidden;
   overflow-y: auto;
-
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
 }
-
 
 /* ========================================
    HEADER
@@ -24,35 +19,28 @@
 
 .game-header {
   text-align: center;
-
   margin-top: 35px;
 }
 
 .game-header h1 {
   margin: 0;
-
   font-family: Arial, Helvetica, sans-serif;
   font-size: 32px;
   font-weight: 600;
-
   color: #333;
 }
 
 .controls {
   margin-top: 12px;
-
   font-family: Arial, Helvetica, sans-serif;
   font-size: 17px;
-
   color: #777;
 }
 
 .controls span {
   font-weight: bold;
-
   color: #555;
 }
-
 
 /* ========================================
    DARK MODE BUTTON
@@ -60,21 +48,14 @@
 
 .dark-mode-button {
   margin-top: 14px;
-
   padding: 7px 14px;
-
   font-family: monospace;
   font-size: 13px;
-
   color: #535353;
-
   background-color: white;
-
   border: 1px solid #aaa;
   border-radius: 3px;
-
   cursor: pointer;
-
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -89,7 +70,6 @@
   background-color: #eeeeee;
 }
 
-
 /* ========================================
    GAME
 ======================================== */
@@ -100,24 +80,17 @@
 
 .game {
   position: relative;
-
   width: 1000px;
   height: 300px;
-
   margin: 50px auto 0;
-
   overflow: hidden;
-
   background-color: white;
-
   border: 1px solid #d0d0d0;
   border-radius: 4px;
-
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
 }
-
 
 /* ========================================
    SCORE
@@ -125,21 +98,15 @@
 
 .score {
   position: absolute;
-
   top: 20px;
   right: 30px;
-
   z-index: 10;
-
   font-family: monospace;
   font-size: 20px;
   font-weight: normal;
-
   color: #535353;
-
   user-select: none;
 }
-
 
 /* ========================================
    CLOUDS
@@ -147,61 +114,43 @@
 
 .cloud-layer {
   position: absolute;
-
   top: 0;
   left: 0;
-
   width: 100%;
   height: 100%;
-
   z-index: 1;
-
   pointer-events: none;
 }
 
 .cloud {
   position: absolute;
-
   width: 50px;
   height: 15px;
-
   background-color: #e0e0e0;
-
   border-radius: 10px;
 }
 
 .cloud::before {
   content: '';
-
   position: absolute;
-
   left: 10px;
   bottom: 5px;
-
   width: 18px;
   height: 18px;
-
   background-color: #e0e0e0;
-
   border-radius: 50%;
 }
 
 .cloud::after {
   content: '';
-
   position: absolute;
-
   right: 8px;
   bottom: 4px;
-
   width: 15px;
   height: 15px;
-
   background-color: #e0e0e0;
-
   border-radius: 50%;
 }
-
 
 /* ========================================
    DINO
@@ -209,33 +158,22 @@
 
 .dino {
   position: absolute;
-
   left: 100px;
-
   bottom: 28px;
-
   width: 82px;
   height: 75px;
-
   z-index: 8;
-
   pointer-events: none;
 }
 
 .dino-image {
   position: absolute;
-
   left: 0;
   bottom: 0;
-
   height: auto;
-
   image-rendering: pixelated;
-
   user-select: none;
-
   -webkit-user-drag: none;
-
   transition:
     opacity 0.12s ease,
     transform 0.12s ease,
@@ -248,7 +186,6 @@
 
 .dino-crouch-image {
   width: 82px;
-
   bottom: -13px;
 }
 
@@ -261,11 +198,7 @@
 }
 
 .dino-running {
-  animation:
-    dinoRun
-    0.25s
-    infinite
-    alternate;
+  animation: dinoRun 0.25s infinite alternate;
 }
 
 .dino-jumping {
@@ -286,52 +219,38 @@
   }
 }
 
-
 /* ========================================
    CACTUS
 ======================================== */
 
 .cactus {
   position: absolute;
-
   bottom: 42px;
-
   width: 8px;
   height: 42px;
-
   background-color: #535353;
-
   z-index: 5;
 }
 
 .cactus::before {
   content: '';
-
   position: absolute;
-
   left: -6px;
   top: 14px;
-
   width: 6px;
   height: 7px;
-
   background-color: #535353;
 }
 
 .cactus::after {
   content: '';
-
   position: absolute;
-
   right: -6px;
   top: 7px;
-
   width: 6px;
   height: 7px;
-
   background-color: #535353;
 }
-
 
 /* ========================================
    BIRD
@@ -339,80 +258,56 @@
 
 .bird {
   position: absolute;
-
   width: 45px;
   height: 30px;
-
   transform: scaleX(-1);
-
   z-index: 5;
 }
 
 .bird-body {
   position: absolute;
-
   left: 15px;
   top: 10px;
-
   width: 20px;
   height: 10px;
-
   background-color: #535353;
 }
 
 .bird-head {
   position: absolute;
-
   left: 30px;
   top: 5px;
-
   width: 12px;
   height: 12px;
-
   background-color: #535353;
 }
 
 .bird-beak {
   position: absolute;
-
   left: 42px;
   top: 9px;
-
   width: 7px;
   height: 5px;
-
   background-color: #535353;
 }
 
 .bird-wing {
   position: absolute;
-
   left: 10px;
   top: 0;
-
   width: 15px;
   height: 15px;
-
   background-color: #535353;
-
   transform-origin: bottom left;
-
-  animation:
-    flap
-    0.6s
-    infinite
-    alternate;
+  animation: flap 0.6s infinite alternate;
 }
 
 .bird-tail {
   position: absolute;
-
   left: 5px;
   top: 12px;
-
   width: 12px;
   height: 7px;
-
   background-color: #535353;
 }
 
@@ -430,27 +325,20 @@
   animation: none;
 }
 
-
 /* ========================================
    GROUND
 ======================================== */
 
 .ground {
   position: absolute;
-
   left: 0;
   bottom: 0;
-
   width: 100%;
   height: 42px;
-
   z-index: 6;
-
   background-color: white;
-
   border-top: 2px solid #535353;
 }
-
 
 /* ========================================
    START SCREEN
@@ -458,44 +346,30 @@
 
 .start-screen {
   position: absolute;
-
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
-
   z-index: 20;
-
   text-align: center;
-
   font-family: monospace;
-
   color: #535353;
-
   user-select: none;
 }
 
 .start-title {
   font-size: 24px;
-
   margin-bottom: 15px;
 }
 
 .start-button {
   padding: 8px 18px;
-
   margin-bottom: 12px;
-
   font-family: monospace;
   font-size: 14px;
-
   color: #535353;
-
   background-color: white;
-
   border: 1px solid #535353;
   border-radius: 3px;
-
   cursor: pointer;
 }
 
@@ -509,10 +383,8 @@
 
 .start-hint {
   font-size: 12px;
-
   color: #777;
 }
-
 
 /* ========================================
    GAME OVER
@@ -520,54 +392,32 @@
 
 .game-over {
   position: absolute;
-
   inset: 0;
-
   z-index: 20;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
-  background: rgba(
-    255,
-    255,
-    255,
-    0.92
-  );
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .game-over-title {
   font-size: 26px;
-
   font-weight: bold;
-
   letter-spacing: 2px;
-
   color: #535353;
-
   margin-bottom: 18px;
 }
 
 .restart-button {
   padding: 9px 22px;
-
   border: 1px solid #777;
-
   border-radius: 3px;
-
   background: white;
-
   color: #535353;
-
   font-family: monospace;
   font-size: 13px;
   font-weight: bold;
-
   cursor: pointer;
 }
 
@@ -581,15 +431,11 @@
 
 .restart-hint {
   margin-top: 12px;
-
   font-family: monospace;
   font-size: 12px;
-
   color: #888;
-
   letter-spacing: 0.5px;
 }
-
 
 /* ========================================
    GAME CONTROLS
@@ -597,158 +443,49 @@
 
 .game-controls {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 10px;
-
   margin-top: 40px;
-
   flex-wrap: wrap;
 }
 
-
 /* ========================================
-   SOUND BUTTON
+   CONTROL BUTTONS
 ======================================== */
 
-.sound-button {
-  padding: 8px 16px;
-
-  font-family: monospace;
-  font-size: 13px;
-  font-weight: bold;
-
-  color: #535353;
-
-  background-color: white;
-
-  border: 1px solid #aaa;
-  border-radius: 3px;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.sound-button:hover {
-  background-color: #f5f5f5;
-}
-
-.sound-button:active {
-  background-color: #eeeeee;
-}
-
-
-/* ========================================
-   COLOR MODE BUTTON
-======================================== */
-
-.color-mode-button {
-  padding: 8px 16px;
-
-  font-family: monospace;
-  font-size: 13px;
-  font-weight: bold;
-
-  color: #535353;
-
-  background-color: white;
-
-  border: 1px solid #aaa;
-  border-radius: 3px;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.color-mode-button:hover {
-  background-color: #f5f5f5;
-}
-
-.color-mode-button:active {
-  background-color: #eeeeee;
-}
-
-
-/* ========================================
-   WEATHER BUTTON
-======================================== */
-
-.weather-button {
-  padding: 8px 16px;
-
-  font-family: monospace;
-  font-size: 13px;
-  font-weight: bold;
-
-  color: #535353;
-
-  background-color: white;
-
-  border: 1px solid #aaa;
-  border-radius: 3px;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.weather-button:hover {
-  background-color: #f5f5f5;
-}
-
-.weather-button:active {
-  background-color: #eeeeee;
-}
-
-
-/* ========================================
-   FULLSCREEN BUTTON
-======================================== */
-
+.sound-button,
+.color-mode-button,
+.weather-button,
 .fullscreen-button {
   padding: 8px 16px;
-
   font-family: monospace;
   font-size: 13px;
   font-weight: bold;
-
   color: #535353;
-
   background-color: white;
-
   border: 1px solid #aaa;
   border-radius: 3px;
-
   cursor: pointer;
-
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
     border-color 0.2s ease;
 }
 
+.sound-button:hover,
+.color-mode-button:hover,
+.weather-button:hover,
 .fullscreen-button:hover {
   background-color: #f5f5f5;
 }
 
+.sound-button:active,
+.color-mode-button:active,
+.weather-button:active,
 .fullscreen-button:active {
   background-color: #eeeeee;
 }
-
 
 /* ========================================
    WEATHER
@@ -756,32 +493,20 @@
 
 .rain-layer {
   position: absolute;
-
   inset: 0;
-
   z-index: 2;
-
   pointer-events: none;
-
   overflow: hidden;
 }
 
 .rain-drop {
   position: absolute;
-
   top: -20px;
-
   width: 1px;
   height: 12px;
-
   background-color: #535353;
-
   opacity: 0.75;
-
-  animation:
-    rainFall
-    linear
-    infinite;
+  animation: rainFall linear infinite;
 }
 
 @keyframes rainFall {
@@ -794,55 +519,35 @@
   }
 }
 
-
 .sun {
   position: absolute;
-
   top: 58px;
   left: 50%;
-
   width: 38px;
   height: 38px;
-
   transform: translateX(-50%);
-
   z-index: 0;
-
   border-radius: 50%;
-
   background-color: #535353;
-
   color: #535353;
 }
 
 .sun-rays {
   position: absolute;
-
   inset: -16px;
-
   background:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       transparent 46%,
       currentColor 46%,
       currentColor 54%,
-      transparent 54%
-    ),
-    linear-gradient(
-      to right,
+      transparent 54%),
+    linear-gradient(to right,
       transparent 46%,
       currentColor 46%,
       currentColor 54%,
-      transparent 54%
-    );
-
+      transparent 54%);
   transform: rotate(45deg);
-
-  animation:
-    sunRotate
-    8s
-    linear
-    infinite;
+  animation: sunRotate 8s linear infinite;
 }
 
 @keyframes sunRotate {
@@ -860,34 +565,22 @@
   animation-play-state: paused;
 }
 
-
 /* ========================================
    GAME INFORMATION
 ======================================== */
 
 .game-info {
   width: 900px;
-
   max-width: calc(100% - 40px);
-
   margin: 50px auto 60px;
-
   padding: 30px 35px;
-
   box-sizing: border-box;
-
   text-align: center;
-
   font-family: Arial, Helvetica, sans-serif;
-
   color: #666;
-
   background-color: white;
-
   border: 1px solid #d0d0d0;
-
   border-radius: 6px;
-
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
@@ -896,23 +589,16 @@
 
 .game-info h2 {
   margin: 0 0 12px;
-
   font-family: monospace;
-
   font-size: 20px;
-
   letter-spacing: 2px;
-
   color: #535353;
 }
 
 .game-info-intro {
   max-width: 700px;
-
   margin: 0 auto 28px;
-
   font-size: 14px;
-
   line-height: 1.6;
 }
 
@@ -922,69 +608,105 @@
 
 .game-info-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-
   text-align: left;
 }
 
 .game-info-item {
   padding: 18px;
-
   background-color: #fafafa;
-
   border: 1px solid #e2e2e2;
-
   border-radius: 4px;
 }
 
 .game-info-item h3 {
   margin: 0 0 9px;
-
   font-family: monospace;
-
   font-size: 13px;
-
   letter-spacing: 0.5px;
-
   color: #535353;
 }
 
 .game-info-item p {
   margin: 0;
-
   font-size: 13px;
-
   line-height: 1.6;
-
   color: #777;
 }
 
 .game-info-footer {
   margin-top: 24px;
-
   padding-top: 20px;
-
   border-top: 1px solid #e2e2e2;
 }
 
 .game-info-footer p {
   max-width: 700px;
-
   margin: 0 auto;
-
   font-family: monospace;
-
   font-size: 12px;
-
   line-height: 1.6;
-
   color: #888;
 }
 
+/* ========================================
+   FOOTER
+======================================== */
+
+.game-footer {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #9aa0a6;
+}
+
+.footer-language {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 17px;
+}
+
+.footer-language button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #9aa0a6;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.footer-language button:hover {
+  color: #535353;
+}
+
+.footer-language button.active {
+  color: #535353;
+  font-weight: bold;
+}
+
+.footer-credit {
+  margin-top: 35px;
+  font-size: 17px;
+  color: #9aa0a6;
+}
+
+.footer-credit a {
+  color: #9aa0a6;
+  text-decoration: none;
+}
+
+.footer-credit a:hover {
+  color: #535353;
+  text-decoration: underline;
+}
 
 /* ========================================
    DARK MODE
@@ -992,7 +714,6 @@
 
 .dark-mode {
   background-color: #202124;
-
   color: #e8eaed;
 }
 
@@ -1010,14 +731,12 @@
 
 .dark-mode .game {
   background-color: #202124;
-
   border-color: #5f6368;
 }
 
 .dark-mode .score {
   color: #e8eaed;
 }
-
 
 /* ========================================
    DARK MODE CLOUDS
@@ -1032,17 +751,13 @@
   background-color: #3c4043;
 }
 
-
 /* ========================================
    DARK MODE DINO
 ======================================== */
 
 .dark-mode .dino-image {
-  filter:
-    brightness(0)
-    invert(1);
+  filter: brightness(0) invert(1);
 }
-
 
 /* ========================================
    DARK MODE CACTUS
@@ -1057,7 +772,6 @@
   background-color: #e8eaed;
 }
 
-
 /* ========================================
    DARK MODE BIRDS
 ======================================== */
@@ -1070,17 +784,14 @@
   background-color: #ffffff;
 }
 
-
 /* ========================================
    DARK MODE GROUND
 ======================================== */
 
 .dark-mode .ground {
   background-color: #202124;
-
   border-top-color: #e8eaed;
 }
-
 
 /* ========================================
    DARK MODE BUTTON
@@ -1088,9 +799,7 @@
 
 .dark-mode .dark-mode-button {
   color: #e8eaed;
-
   background-color: #202124;
-
   border-color: #777;
 }
 
@@ -1102,7 +811,6 @@
   background-color: #3c4043;
 }
 
-
 /* ========================================
    DARK MODE START SCREEN
 ======================================== */
@@ -1113,9 +821,7 @@
 
 .dark-mode .start-button {
   color: #e8eaed;
-
   background-color: #202124;
-
   border-color: #aaa;
 }
 
@@ -1131,18 +837,12 @@
   color: #9aa0a6;
 }
 
-
 /* ========================================
    DARK MODE GAME OVER
 ======================================== */
 
 .dark-mode .game-over {
-  background: rgba(
-    32,
-    33,
-    36,
-    0.94
-  );
+  background: rgba(32, 33, 36, 0.94);
 }
 
 .dark-mode .game-over-title {
@@ -1151,9 +851,7 @@
 
 .dark-mode .restart-button {
   color: #e8eaed;
-
   background-color: #202124;
-
   border-color: #777;
 }
 
@@ -1169,90 +867,32 @@
   color: #9aa0a6;
 }
 
-
 /* ========================================
-   DARK MODE SOUND BUTTON
+   DARK MODE CONTROL BUTTONS
 ======================================== */
 
-.dark-mode .sound-button {
-  color: #e8eaed;
-
-  background-color: #202124;
-
-  border-color: #777;
-}
-
-.dark-mode .sound-button:hover {
-  background-color: #303134;
-}
-
-.dark-mode .sound-button:active {
-  background-color: #3c4043;
-}
-
-
-/* ========================================
-   DARK MODE COLOR BUTTON
-======================================== */
-
-.dark-mode .color-mode-button {
-  color: #e8eaed;
-
-  background-color: #202124;
-
-  border-color: #777;
-}
-
-.dark-mode .color-mode-button:hover {
-  background-color: #303134;
-}
-
-.dark-mode .color-mode-button:active {
-  background-color: #3c4043;
-}
-
-
-/* ========================================
-   DARK MODE WEATHER BUTTON
-======================================== */
-
-.dark-mode .weather-button {
-  color: #e8eaed;
-
-  background-color: #202124;
-
-  border-color: #777;
-}
-
-.dark-mode .weather-button:hover {
-  background-color: #303134;
-}
-
-.dark-mode .weather-button:active {
-  background-color: #3c4043;
-}
-
-
-/* ========================================
-   DARK MODE FULLSCREEN BUTTON
-======================================== */
-
+.dark-mode .sound-button,
+.dark-mode .color-mode-button,
+.dark-mode .weather-button,
 .dark-mode .fullscreen-button {
   color: #e8eaed;
-
   background-color: #202124;
-
   border-color: #777;
 }
 
+.dark-mode .sound-button:hover,
+.dark-mode .color-mode-button:hover,
+.dark-mode .weather-button:hover,
 .dark-mode .fullscreen-button:hover {
   background-color: #303134;
 }
 
+.dark-mode .sound-button:active,
+.dark-mode .color-mode-button:active,
+.dark-mode .weather-button:active,
 .dark-mode .fullscreen-button:active {
   background-color: #3c4043;
 }
-
 
 /* ========================================
    DARK MODE WEATHER
@@ -1264,10 +904,8 @@
 
 .dark-mode .sun {
   background-color: #e8eaed;
-
   color: #e8eaed;
 }
-
 
 /* ========================================
    DARK MODE GAME INFORMATION
@@ -1275,9 +913,7 @@
 
 .dark-mode .game-info {
   background-color: #202124;
-
   border-color: #5f6368;
-
   color: #9aa0a6;
 }
 
@@ -1288,7 +924,6 @@
 
 .dark-mode .game-info-item {
   background-color: #292a2d;
-
   border-color: #5f6368;
 }
 
@@ -1308,27 +943,43 @@
   color: #777;
 }
 
+/* ========================================
+   DARK MODE FOOTER
+======================================== */
+
+.dark-mode .game-footer {
+  color: #9aa0a6;
+}
+
+.dark-mode .footer-language button {
+  color: #9aa0a6;
+}
+
+.dark-mode .footer-language button:hover,
+.dark-mode .footer-language button.active {
+  color: #e8eaed;
+}
+
+.dark-mode .footer-credit {
+  color: #9aa0a6;
+}
+
+.dark-mode .footer-credit a {
+  color: #9aa0a6;
+}
+
+.dark-mode .footer-credit a:hover {
+  color: #e8eaed;
+}
 
 /* ========================================
    COLOR MODE
 ======================================== */
 
-/* PINK DINO */
-
 .color-mode .dino-image {
   filter:
-    brightness(0)
-    saturate(100%)
-    invert(70%)
-    sepia(45%)
-    saturate(1200%)
-    hue-rotate(290deg)
-    brightness(105%)
-    contrast(95%);
+    brightness(0) saturate(100%) invert(70%) sepia(45%) saturate(1200%) hue-rotate(290deg) brightness(105%) contrast(95%);
 }
-
-
-/* GREEN CACTUS */
 
 .color-mode .cactus {
   background-color: #39a852;
@@ -1339,9 +990,6 @@
   background-color: #39a852;
 }
 
-
-/* BLUE CLOUDS */
-
 .color-mode .cloud {
   background-color: #7db9e8;
 }
@@ -1351,9 +999,6 @@
   background-color: #7db9e8;
 }
 
-
-/* BROWN BIRDS */
-
 .color-mode .bird-body,
 .color-mode .bird-head,
 .color-mode .bird-beak,
@@ -1362,40 +1007,23 @@
   background-color: #b8895b;
 }
 
-
-/* COLOR MODE WEATHER */
-
 .color-mode .rain-drop {
   background-color: #7db9e8;
 }
 
 .color-mode .sun {
   background-color: #f5c542;
-
   color: #f5c542;
 }
-
 
 /* ========================================
    COLOR MODE + DARK MODE
 ======================================== */
 
-/* Pink dino */
-
 .dark-mode.color-mode .dino-image {
   filter:
-    brightness(0)
-    saturate(100%)
-    invert(70%)
-    sepia(45%)
-    saturate(1200%)
-    hue-rotate(290deg)
-    brightness(105%)
-    contrast(95%);
+    brightness(0) saturate(100%) invert(70%) sepia(45%) saturate(1200%) hue-rotate(290deg) brightness(105%) contrast(95%);
 }
-
-
-/* Green cactus */
 
 .dark-mode.color-mode .cactus {
   background-color: #39a852;
@@ -1406,9 +1034,6 @@
   background-color: #39a852;
 }
 
-
-/* Darker blue clouds */
-
 .dark-mode.color-mode .cloud {
   background-color: #4f82ad;
 }
@@ -1418,9 +1043,6 @@
   background-color: #4f82ad;
 }
 
-
-/* Brown birds */
-
 .dark-mode.color-mode .bird-body,
 .dark-mode.color-mode .bird-head,
 .dark-mode.color-mode .bird-beak,
@@ -1429,19 +1051,14 @@
   background-color: #b8895b;
 }
 
-
-/* Dark color weather */
-
 .dark-mode.color-mode .rain-drop {
   background-color: #4f82ad;
 }
 
 .dark-mode.color-mode .sun {
   background-color: #f5c542;
-
   color: #f5c542;
 }
-
 
 /* ========================================
    FULLSCREEN
@@ -1449,17 +1066,12 @@
 
 .fullscreen-active {
   min-height: 100vh;
-
   width: 100%;
-
   overflow-x: hidden;
   overflow-y: auto;
-
   display: flex;
-
   flex-direction: column;
 }
-
 
 /* ========================================
    FULLSCREEN HEADER
@@ -1473,21 +1085,16 @@
   font-size: 46px;
 }
 
-
-/* Hide header controls in fullscreen */
-
 .fullscreen-active .controls {
-  display: none !important;
+  margin-top: 18px;
+  font-size: 22px;
 }
 
 .fullscreen-active .dark-mode-button {
   margin-top: 18px;
-
   padding: 10px 20px;
-
   font-size: 16px;
 }
-
 
 /* ========================================
    FULLSCREEN GAME CONTAINER
@@ -1495,24 +1102,15 @@
 
 .fullscreen-active .game-container {
   width: 100%;
-
   flex: 1;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
   min-height: 0;
-
   padding-bottom: 20px;
-
   box-sizing: border-box;
 }
-
 
 /* ========================================
    FULLSCREEN GAME
@@ -1520,12 +1118,9 @@
 
 .fullscreen-active .game {
   transform: scale(1.5);
-
   transform-origin: center center;
-
   margin: 50px auto 110px;
 }
-
 
 /* ========================================
    FULLSCREEN CONTROLS
@@ -1533,46 +1128,42 @@
 
 .fullscreen-active .game-controls {
   position: relative;
-
   z-index: 50;
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 10px;
-
   width: 100%;
-
   margin-top: 0;
-
   flex-wrap: wrap;
 }
 
 .fullscreen-active .game-controls button {
   position: relative;
-
   z-index: 51;
 }
 
-
 /* ========================================
-   HIDE ABOUT SECTION IN FULLSCREEN
+   HIDE INFORMATION IN FULLSCREEN
 ======================================== */
 
 .fullscreen-active .game-info {
   display: none;
 }
 
+/* ========================================
+   HIDE FOOTER IN FULLSCREEN
+======================================== */
+
+.fullscreen-active .game-footer {
+  display: none;
+}
 
 /* ========================================
-   RESPONSIVE GAME INFORMATION
+   RESPONSIVE
 ======================================== */
 
 @media (max-width: 800px) {
-
   .game-info {
     padding: 25px 20px;
   }
@@ -1580,9 +1171,7 @@
   .game-info-grid {
     grid-template-columns: 1fr;
   }
-
 }
-
 
 /* ========================================
    PAGE SCROLLING
@@ -1591,7 +1180,6 @@
 html,
 body {
   margin: 0;
-
   overflow-x: hidden;
   overflow-y: auto;
 }

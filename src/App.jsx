@@ -26,6 +26,7 @@ function App() {
   const [colorMode, setColorMode] = useState(false);
   const [weather, setWeather] = useState('clear');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [language, setLanguage] = useState('en');
 
   const obstacleId = useRef(0);
   const cloudId = useRef(0);
@@ -33,6 +34,220 @@ function App() {
   const scoreRef = useRef(0);
   const spawnTimer = useRef(0);
   const audioContextRef = useRef(null);
+
+  const translations = {
+    en: {
+      title: 'Dinosaur Game - Chrome',
+      jump: 'Jump',
+      crouch: 'Crouch',
+
+      dark: '☾ DARK',
+      light: '☀ LIGHT',
+
+      soundOn: '🔊 SOUND ON',
+      muted: '🔇 MUTED',
+
+      classic: '🌑 CLASSIC',
+      color: '🎨 COLOR',
+
+      clear: '☁️ CLEAR',
+      rain: '🌧️ RAIN',
+      sunny: '☀️ SUNNY',
+
+      fullscreen: '⛶ FULLSCREEN',
+      exitFullscreen: '⛶ EXIT FULLSCREEN',
+
+      startTitle: 'DINO RUN',
+      start: 'START',
+      pressEnterStart: 'PRESS ENTER TO START',
+
+      gameOver: 'GAME OVER',
+      restart: 'RESTART',
+      pressEnterRestart: 'PRESS ENTER TO RESTART',
+
+      aboutTitle: 'ABOUT DINO RUN',
+
+      intro: (
+        <>
+          Welcome to <strong>Dino Run</strong> — a custom endless runner
+          built from scratch with React and JavaScript.
+        </>
+      ),
+
+      runTitle: 'RUN & SURVIVE',
+      runText:
+        'Run as far as you can while avoiding cacti and flying birds. The longer you survive, the higher your score gets.',
+
+      fasterTitle: 'GET FASTER',
+      fasterText:
+        'The game gradually increases in speed as your score grows, making each run more challenging than the last.',
+
+      controlsTitle: 'CONTROLS',
+      controlsText:
+        "Press SPACE or UP to jump. Hold DOWN to crouch underneath flying obstacles and react to what's coming next.",
+
+      customizeTitle: 'CUSTOMIZE',
+      customizeText:
+        'Switch between Classic and Color modes, change the weather, toggle sounds, use Dark Mode, or play in Fullscreen.',
+
+      highScoreTitle: 'HIGH SCORE',
+      highScoreText:
+        'Your current score and best score are displayed above the game. Keep playing and try to beat your personal record.',
+
+      dynamicTitle: 'DYNAMIC WORLD',
+      dynamicText:
+        'Clouds move across the sky while different weather conditions create rain or bring out the sun during your run.',
+
+      infoFooter:
+        'Built as a personal coding project to practice React, JavaScript, CSS, animations, game logic, and UI design.',
+
+      language: 'Language:',
+      madeBy: 'Made by Diana',
+      contact: 'Contact Me',
+    },
+
+    es: {
+      title: 'Juego de Dinosaurio - Chrome',
+      jump: 'Saltar',
+      crouch: 'Agacharse',
+
+      dark: '☾ OSCURO',
+      light: '☀ CLARO',
+
+      soundOn: '🔊 SONIDO',
+      muted: '🔇 SILENCIADO',
+
+      classic: '🌑 CLÁSICO',
+      color: '🎨 COLOR',
+
+      clear: '☁️ DESPEJADO',
+      rain: '🌧️ LLUVIA',
+      sunny: '☀️ SOLEADO',
+
+      fullscreen: '⛶ PANTALLA COMPLETA',
+      exitFullscreen: '⛶ SALIR DE PANTALLA COMPLETA',
+
+      startTitle: 'DINO RUN',
+      start: 'INICIAR',
+      pressEnterStart: 'PULSA ENTER PARA INICIAR',
+
+      gameOver: 'FIN DEL JUEGO',
+      restart: 'REINICIAR',
+      pressEnterRestart: 'PULSA ENTER PARA REINICIAR',
+
+      aboutTitle: 'SOBRE DINO RUN',
+
+      intro: (
+        <>
+          Bienvenido a <strong>Dino Run</strong> — un juego de carrera
+          infinita creado desde cero con React y JavaScript.
+        </>
+      ),
+
+      runTitle: 'CORRE Y SOBREVIVE',
+      runText:
+        'Corre lo más lejos que puedas mientras evitas cactus y pájaros voladores. Cuanto más sobrevivas, mayor será tu puntuación.',
+
+      fasterTitle: 'AUMENTA LA VELOCIDAD',
+      fasterText:
+        'El juego aumenta gradualmente su velocidad a medida que sube tu puntuación, haciendo que cada partida sea más difícil.',
+
+      controlsTitle: 'CONTROLES',
+      controlsText:
+        'Pulsa ESPACIO o ARRIBA para saltar. Mantén ABAJO para agacharte debajo de los obstáculos voladores y reaccionar a lo que viene.',
+
+      customizeTitle: 'PERSONALIZA',
+      customizeText:
+        'Cambia entre los modos Clásico y Color, cambia el clima, activa o desactiva los sonidos, usa el Modo Oscuro o juega en pantalla completa.',
+
+      highScoreTitle: 'PUNTUACIÓN MÁXIMA',
+      highScoreText:
+        'Tu puntuación actual y tu mejor puntuación aparecen encima del juego. Sigue jugando e intenta superar tu récord personal.',
+
+      dynamicTitle: 'MUNDO DINÁMICO',
+      dynamicText:
+        'Las nubes se mueven por el cielo mientras las diferentes condiciones climáticas crean lluvia o hacen aparecer el sol durante tu partida.',
+
+      infoFooter:
+        'Creado como proyecto personal de programación para practicar React, JavaScript, CSS, animaciones, lógica de juegos y diseño de interfaces.',
+
+      language: 'Idioma:',
+      madeBy: 'Hecho por Diana',
+      contact: 'Contáctame',
+    },
+
+    ru: {
+      title: 'Игра с динозавром - Chrome',
+      jump: 'Прыжок',
+      crouch: 'Приседание',
+
+      dark: '☾ ТЕМНАЯ',
+      light: '☀ СВЕТЛАЯ',
+
+      soundOn: '🔊 ЗВУК ВКЛ',
+      muted: '🔇 БЕЗ ЗВУКА',
+
+      classic: '🌑 КЛАССИКА',
+      color: '🎨 ЦВЕТ',
+
+      clear: '☁️ ЯСНО',
+      rain: '🌧️ ДОЖДЬ',
+      sunny: '☀️ СОЛНЕЧНО',
+
+      fullscreen: '⛶ ПОЛНЫЙ ЭКРАН',
+      exitFullscreen: '⛶ ВЫЙТИ ИЗ ПОЛНОГО ЭКРАНА',
+
+      startTitle: 'DINO RUN',
+      start: 'НАЧАТЬ',
+      pressEnterStart: 'НАЖМИТЕ ENTER, ЧТОБЫ НАЧАТЬ',
+
+      gameOver: 'ИГРА ОКОНЧЕНА',
+      restart: 'ЗАНОВО',
+      pressEnterRestart: 'НАЖМИТЕ ENTER, ЧТОБЫ НАЧАТЬ ЗАНОВО',
+
+      aboutTitle: 'О DINO RUN',
+
+      intro: (
+        <>
+          Добро пожаловать в <strong>Dino Run</strong> — бесконечную игру,
+          созданную с нуля с помощью React и JavaScript.
+        </>
+      ),
+
+      runTitle: 'БЕГИ И ВЫЖИВАЙ',
+      runText:
+        'Беги как можно дальше, избегая кактусов и летающих птиц. Чем дольше ты выживаешь, тем выше становится твой счет.',
+
+      fasterTitle: 'СТАНОВИСЬ БЫСТРЕЕ',
+      fasterText:
+        'Скорость игры постепенно увеличивается вместе с твоим счетом, делая каждую попытку сложнее предыдущей.',
+
+      controlsTitle: 'УПРАВЛЕНИЕ',
+      controlsText:
+        'Нажми ПРОБЕЛ или ВВЕРХ, чтобы прыгнуть. Удерживай ВНИЗ, чтобы присесть под летающими препятствиями.',
+
+      customizeTitle: 'НАСТРОЙКИ',
+      customizeText:
+        'Переключайся между классическим и цветным режимами, меняй погоду, включай или выключай звук, используй темный режим или полный экран.',
+
+      highScoreTitle: 'РЕКОРД',
+      highScoreText:
+        'Текущий счет и лучший результат отображаются над игрой. Продолжай играть и попробуй побить свой личный рекорд.',
+
+      dynamicTitle: 'ДИНАМИЧНЫЙ МИР',
+      dynamicText:
+        'Облака движутся по небу, а разные погодные условия создают дождь или показывают солнце во время игры.',
+
+      infoFooter:
+        'Создано как личный проект для практики React, JavaScript, CSS, анимаций, игровой логики и дизайна интерфейса.',
+
+      language: 'Язык:',
+      madeBy: 'Автор: Diana',
+      contact: 'Связаться',
+    },
+  };
+
+  const t = translations[language];
 
   function getAudioContext() {
     if (!audioContextRef.current) {
@@ -55,11 +270,8 @@ function App() {
       audioContext.resume();
     }
 
-    const oscillator =
-      audioContext.createOscillator();
-
-    const gain =
-      audioContext.createGain();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
     oscillator.type = 'square';
 
@@ -87,7 +299,6 @@ function App() {
     gain.connect(audioContext.destination);
 
     oscillator.start();
-
     oscillator.stop(
       audioContext.currentTime + 0.35
     );
@@ -95,14 +306,8 @@ function App() {
 
   function cycleWeather() {
     setWeather((currentWeather) => {
-      if (currentWeather === 'clear') {
-        return 'rain';
-      }
-
-      if (currentWeather === 'rain') {
-        return 'sunny';
-      }
-
+      if (currentWeather === 'clear') return 'rain';
+      if (currentWeather === 'rain') return 'sunny';
       return 'clear';
     });
   }
@@ -115,10 +320,7 @@ function App() {
         await document.exitFullscreen();
       }
     } catch (error) {
-      console.error(
-        'Fullscreen error:',
-        error
-      );
+      console.error('Fullscreen error:', error);
     }
   }
 
@@ -142,10 +344,7 @@ function App() {
     };
   }, []);
 
-  function createPattern(
-    startX,
-    currentScore
-  ) {
+  function createPattern(startX, currentScore) {
     const singleCactus = () => [
       {
         id: obstacleId.current++,
@@ -305,13 +504,10 @@ function App() {
       ];
     }
 
-    let availablePatterns =
-      patterns.filter(
-        (pattern) =>
-          !recentPatterns.current.includes(
-            pattern
-          )
-      );
+    let availablePatterns = patterns.filter(
+      (pattern) =>
+        !recentPatterns.current.includes(pattern)
+    );
 
     if (availablePatterns.length === 0) {
       availablePatterns = patterns;
@@ -319,15 +515,12 @@ function App() {
 
     const patternName =
       availablePatterns[
-        Math.floor(
-          Math.random() *
-            availablePatterns.length
-        )
+      Math.floor(
+        Math.random() * availablePatterns.length
+      )
       ];
 
-    recentPatterns.current.push(
-      patternName
-    );
+    recentPatterns.current.push(patternName);
 
     if (recentPatterns.current.length > 2) {
       recentPatterns.current.shift();
@@ -374,7 +567,6 @@ function App() {
     );
 
     const startingObstacles = [];
-
     let startX = 1000;
 
     for (let i = 0; i < 3; i++) {
@@ -396,13 +588,16 @@ function App() {
       startingClouds.push(
         createCloud(
           100 +
-            i * 180 +
-            Math.random() * 150
+          i * 180 +
+          Math.random() * 150
         )
       );
     }
 
-    setObstacles(startingObstacles);
+    setObstacles(
+      startingObstacles
+    );
+
     setClouds(startingClouds);
     setScore(0);
     setGameSpeed(17);
@@ -493,10 +688,7 @@ function App() {
         handleKeyUp
       );
     };
-  }, [
-    gameStarted,
-    gameOver,
-  ]);
+  }, [gameStarted, gameOver]);
 
   useEffect(() => {
     if (!gameStarted) return;
@@ -507,18 +699,10 @@ function App() {
     setGameSpeed(
       Math.min(newSpeed, 30)
     );
-  }, [
-    score,
-    gameStarted,
-  ]);
+  }, [score, gameStarted]);
 
   useEffect(() => {
-    if (
-      !gameStarted ||
-      gameOver
-    ) {
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     const movement = setInterval(() => {
       setObstacles(
@@ -526,14 +710,14 @@ function App() {
           currentObstacles
             .map((obstacle) => ({
               ...obstacle,
-
               position:
                 obstacle.position -
                 gameSpeed * 0.53,
             }))
             .filter(
               (obstacle) =>
-                obstacle.position > -120
+                obstacle.position >
+                -120
             )
       );
     }, 16);
@@ -547,12 +731,7 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (
-      !gameStarted ||
-      gameOver
-    ) {
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     spawnTimer.current = 0;
 
@@ -613,18 +792,10 @@ function App() {
 
     return () =>
       clearInterval(spawn);
-  }, [
-    gameStarted,
-    gameOver,
-  ]);
+  }, [gameStarted, gameOver]);
 
   useEffect(() => {
-    if (
-      !gameStarted ||
-      gameOver
-    ) {
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     const cloudMovement =
       setInterval(() => {
@@ -634,12 +805,11 @@ function App() {
               currentClouds
                 .map((cloud) => ({
                   ...cloud,
-
                   position:
                     cloud.position -
                     gameSpeed *
-                      0.18 *
-                      0.53,
+                    0.18 *
+                    0.53,
                 }))
                 .filter(
                   (cloud) =>
@@ -648,17 +818,19 @@ function App() {
                 );
 
             const furthestCloud =
-              updatedClouds.length > 0
+              updatedClouds.length >
+                0
                 ? Math.max(
-                    ...updatedClouds.map(
-                      (cloud) =>
-                        cloud.position
-                    )
+                  ...updatedClouds.map(
+                    (cloud) =>
+                      cloud.position
                   )
+                )
                 : 0;
 
             if (
-              furthestCloud < 760
+              furthestCloud <
+              760
             ) {
               const numberOfClouds =
                 1 +
@@ -668,12 +840,14 @@ function App() {
 
               for (
                 let i = 0;
-                i < numberOfClouds;
+                i <
+                numberOfClouds;
                 i++
               ) {
                 updatedClouds.push(
                   createCloud(
-                    1000 + i * 120
+                    1000 +
+                    i * 120
                   )
                 );
               }
@@ -695,12 +869,7 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (
-      !gameStarted ||
-      gameOver
-    ) {
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     const scoreTimer =
       setInterval(() => {
@@ -712,19 +881,13 @@ function App() {
 
     return () =>
       clearInterval(scoreTimer);
-  }, [
-    gameStarted,
-    gameOver,
-  ]);
+  }, [gameStarted, gameOver]);
 
   useEffect(() => {
     if (score > highScore) {
       setHighScore(score);
     }
-  }, [
-    score,
-    highScore,
-  ]);
+  }, [score, highScore]);
 
   useEffect(() => {
     if (gameOver) {
@@ -733,12 +896,7 @@ function App() {
   }, [gameOver]);
 
   useEffect(() => {
-    if (
-      !gameStarted ||
-      gameOver
-    ) {
-      return;
-    }
+    if (!gameStarted || gameOver) return;
 
     const collisionCheck =
       setInterval(() => {
@@ -777,23 +935,23 @@ function App() {
 
             const horizontalCollision =
               dinoRect.right -
-                dinoPaddingX >
-                obstacleRect.left +
-                  obstaclePaddingX &&
+              dinoPaddingX >
+              obstacleRect.left +
+              obstaclePaddingX &&
               dinoRect.left +
-                dinoPaddingX <
-                obstacleRect.right -
-                  obstaclePaddingX;
+              dinoPaddingX <
+              obstacleRect.right -
+              obstaclePaddingX;
 
             const verticalCollision =
               dinoRect.bottom -
-                dinoPaddingY >
-                obstacleRect.top +
-                  obstaclePaddingY &&
+              dinoPaddingY >
+              obstacleRect.top +
+              obstaclePaddingY &&
               dinoRect.top +
-                dinoPaddingY <
-                obstacleRect.bottom -
-                  obstaclePaddingY;
+              dinoPaddingY <
+              obstacleRect.bottom -
+              obstaclePaddingY;
 
             if (
               horizontalCollision &&
@@ -826,29 +984,23 @@ function App() {
         weather-${weather}
       `}
     >
-
       <header className="game-header">
-
-        <h1>
-          Dinosaur Game - Chrome
-        </h1>
+        <h1>{t.title}</h1>
 
         <p className="controls">
-          <span>SPACE / ↑</span>
-          {' '}
-          Jump
+          <span>SPACE / ↑</span>{' '}
+          {t.jump}
           {'   '}
-          <span>↓</span>
-          {' '}
-          Crouch
+          <span>↓</span>{' '}
+          {t.crouch}
         </p>
 
         <button
           type="button"
           className="dark-mode-button"
-          onMouseDown={(event) => {
-            event.preventDefault();
-          }}
+          onMouseDown={(event) =>
+            event.preventDefault()
+          }
           onClick={() =>
             setDarkMode(
               (current) => !current
@@ -856,18 +1008,13 @@ function App() {
           }
         >
           {darkMode
-            ? '☀ LIGHT'
-            : '☾ DARK'}
+            ? t.light
+            : t.dark}
         </button>
-
       </header>
 
-
       <main className="game-container">
-
         <div className="game">
-
-          {/* WEATHER ONLY APPEARS AFTER START */}
 
           {gameStarted &&
             weather === 'sunny' && (
@@ -879,7 +1026,6 @@ function App() {
           {gameStarted &&
             weather === 'rain' && (
               <div className="rain-layer">
-
                 {Array.from({
                   length: 70,
                 }).map(
@@ -888,34 +1034,27 @@ function App() {
                       key={index}
                       className="rain-drop"
                       style={{
-                        left: `${
-                          (index * 37) %
+                        left: `${(index * 37) %
                           100
-                        }%`,
-
-                        animationDelay: `${
-                          (index * 0.13) %
+                          }%`,
+                        animationDelay: `${(index * 0.13) %
                           1.5
-                        }s`,
-
-                        animationDuration: `${
-                          0.55 +
+                          }s`,
+                        animationDuration: `${0.55 +
                           ((index * 7) %
                             5) *
-                            0.1
-                        }s`,
+                          0.1
+                          }s`,
                       }}
                     />
                   )
                 )}
-
               </div>
             )}
 
           {gameStarted &&
             weather !== 'sunny' && (
               <div className="cloud-layer">
-
                 {clouds.map(
                   (cloud) => (
                     <Cloud
@@ -923,32 +1062,25 @@ function App() {
                       position={
                         cloud.position
                       }
-                      top={cloud.top}
+                      top={
+                        cloud.top
+                      }
                     />
                   )
                 )}
-
               </div>
             )}
 
-
           <div className="score">
-
             HI{' '}
-            {String(highScore).padStart(
-              5,
-              '0'
-            )}
-
-            {' '}
-
+            {String(
+              highScore
+            ).padStart(5, '0')}{' '}
             {String(score).padStart(
               5,
               '0'
             )}
-
           </div>
-
 
           {gameStarted && (
             <Dino
@@ -966,10 +1098,8 @@ function App() {
             />
           )}
 
-
           {obstacles.map(
             (obstacle) => {
-
               if (
                 obstacle.type ===
                 'cactus'
@@ -1008,66 +1138,56 @@ function App() {
             }
           )}
 
-
           {!gameStarted && (
             <div className="start-screen">
-
               <div className="start-title">
-                DINO RUN
+                {t.startTitle}
               </div>
 
               <button
                 className="start-button"
                 onClick={setupGame}
               >
-                START
+                {t.start}
               </button>
 
               <div className="start-hint">
-                PRESS ENTER TO START
+                {t.pressEnterStart}
               </div>
-
             </div>
           )}
 
-
           {gameOver && (
             <div className="game-over">
-
               <div className="game-over-title">
-                GAME OVER
+                {t.gameOver}
               </div>
 
               <button
                 className="restart-button"
                 onClick={setupGame}
               >
-                RESTART
+                {t.restart}
               </button>
 
               <div className="restart-hint">
-                PRESS ENTER TO RESTART
+                {t.pressEnterRestart}
               </div>
-
             </div>
           )}
-
 
           {gameStarted && (
             <div className="ground"></div>
           )}
-
         </div>
 
-
         <div className="game-controls">
-
           <button
             type="button"
             className="sound-button"
-            onMouseDown={(event) => {
-              event.preventDefault();
-            }}
+            onMouseDown={(event) =>
+              event.preventDefault()
+            }
             onClick={() =>
               setSoundEnabled(
                 (current) => !current
@@ -1075,17 +1195,16 @@ function App() {
             }
           >
             {soundEnabled
-              ? '🔊 SOUND ON'
-              : '🔇 MUTED'}
+              ? t.soundOn
+              : t.muted}
           </button>
-
 
           <button
             type="button"
             className="color-mode-button"
-            onMouseDown={(event) => {
-              event.preventDefault();
-            }}
+            onMouseDown={(event) =>
+              event.preventDefault()
+            }
             onClick={() =>
               setColorMode(
                 (current) => !current
@@ -1093,178 +1212,148 @@ function App() {
             }
           >
             {colorMode
-              ? '🌑 CLASSIC'
-              : '🎨 COLOR'}
+              ? t.classic
+              : t.color}
           </button>
-
 
           <button
             type="button"
             className="weather-button"
-            onMouseDown={(event) => {
-              event.preventDefault();
-            }}
+            onMouseDown={(event) =>
+              event.preventDefault()
+            }
             onClick={cycleWeather}
           >
             {weather === 'clear'
-              ? '☁️ CLEAR'
+              ? t.clear
               : weather === 'rain'
-                ? '🌧️ RAIN'
-                : '☀️ SUNNY'}
+                ? t.rain
+                : t.sunny}
           </button>
-
 
           <button
             type="button"
             className="fullscreen-button"
-            onMouseDown={(event) => {
-              event.preventDefault();
-            }}
+            onMouseDown={(event) =>
+              event.preventDefault()
+            }
             onClick={
               toggleFullscreen
             }
           >
             {isFullscreen
-              ? '⛶ EXIT FULLSCREEN'
-              : '⛶ FULLSCREEN'}
+              ? t.exitFullscreen
+              : t.fullscreen}
           </button>
-
         </div>
-
-
-        {/* ========================================
-            ABOUT THE GAME
-        ======================================== */}
 
         <div className="game-info">
-
-          <h2>
-            ABOUT DINO RUN
-          </h2>
+          <h2>{t.aboutTitle}</h2>
 
           <p className="game-info-intro">
-            Welcome to{' '}
-            <strong>Dino Run</strong>
-            {' '}— a custom endless runner
-            built from scratch with React
-            and JavaScript.
+            {t.intro}
           </p>
 
-
           <div className="game-info-grid">
-
             <div className="game-info-item">
-
-              <h3>
-                RUN & SURVIVE
-              </h3>
-
-              <p>
-                Run as far as you can while
-                avoiding cacti and flying birds.
-                The longer you survive, the
-                higher your score gets.
-              </p>
-
+              <h3>{t.runTitle}</h3>
+              <p>{t.runText}</p>
             </div>
 
-
             <div className="game-info-item">
-
-              <h3>
-                GET FASTER
-              </h3>
-
-              <p>
-                The game gradually increases
-                in speed as your score grows,
-                making each run more challenging
-                than the last.
-              </p>
-
+              <h3>{t.fasterTitle}</h3>
+              <p>{t.fasterText}</p>
             </div>
 
-
             <div className="game-info-item">
-
-              <h3>
-                CONTROLS
-              </h3>
-
-              <p>
-                Press SPACE or ↑ to jump.
-                Hold ↓ to crouch underneath
-                flying obstacles and react to
-                what's coming next.
-              </p>
-
+              <h3>{t.controlsTitle}</h3>
+              <p>{t.controlsText}</p>
             </div>
 
-
             <div className="game-info-item">
-
-              <h3>
-                CUSTOMIZE
-              </h3>
-
-              <p>
-                Switch between Classic and Color
-                modes, change the weather, toggle
-                sounds, use Dark Mode, or play
-                in Fullscreen.
-              </p>
-
+              <h3>{t.customizeTitle}</h3>
+              <p>{t.customizeText}</p>
             </div>
 
-
             <div className="game-info-item">
-
-              <h3>
-                HIGH SCORE
-              </h3>
-
-              <p>
-                Your current score and best score
-                are displayed above the game.
-                Keep playing and try to beat
-                your personal record.
-              </p>
-
+              <h3>{t.highScoreTitle}</h3>
+              <p>{t.highScoreText}</p>
             </div>
 
-
             <div className="game-info-item">
-
-              <h3>
-                DYNAMIC WORLD
-              </h3>
-
-              <p>
-                Clouds move across the sky while
-                different weather conditions
-                create rain or bring out the sun
-                during your run.
-              </p>
-
+              <h3>{t.dynamicTitle}</h3>
+              <p>{t.dynamicText}</p>
             </div>
-
           </div>
-
 
           <div className="game-info-footer">
-
-            <p>
-              Built as a personal coding project
-              to practice React, JavaScript, CSS,
-              animations, game logic, and UI design.
-            </p>
-
+            <p>{t.infoFooter}</p>
           </div>
-
         </div>
 
-      </main>
+        <footer className="game-footer">
+          <div className="footer-language">
+            <span>{t.language}</span>
 
+            <button
+              type="button"
+              className={
+                language === 'en'
+                  ? 'active'
+                  : ''
+              }
+              onClick={() =>
+                setLanguage('en')
+              }
+            >
+              English
+            </button>
+
+            <span>·</span>
+
+            <button
+              type="button"
+              className={
+                language === 'es'
+                  ? 'active'
+                  : ''
+              }
+              onClick={() =>
+                setLanguage('es')
+              }
+            >
+              Español
+            </button>
+
+            <span>·</span>
+
+            <button
+              type="button"
+              className={
+                language === 'ru'
+                  ? 'active'
+                  : ''
+              }
+              onClick={() =>
+                setLanguage('ru')
+              }
+            >
+              Русский
+            </button>
+          </div>
+
+          <div className="footer-credit">
+            {t.madeBy} ·{' '}
+            <a
+              href="https://www.linkedin.com/in/qopci/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.contact}
+            </a>
+          </div>
+        </footer>
+      </main>
     </div>
   );
 }
