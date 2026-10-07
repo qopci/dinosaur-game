@@ -1,4 +1,8 @@
-function Cloud({ position, top }) {
+function Cloud({
+  position,
+  top,
+}) {
+
   return (
     <div
       className="cloud"
@@ -8,6 +12,7 @@ function Cloud({ position, top }) {
       }}
     ></div>
   );
+
 }
 
 export default Cloud;
