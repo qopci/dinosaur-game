@@ -225,11 +225,6 @@ function Dino({
 
   /* ========================================
      GAME OVER
-     
-     IMPORTANT:
-     Do NOT reset jumpHeight here.
-     This keeps the dino exactly where
-     it was when it collided.
   ======================================== */
 
   useEffect(() => {
@@ -324,6 +319,5 @@ function Dino({
   );
 
 }
-
 
 export default Dino;

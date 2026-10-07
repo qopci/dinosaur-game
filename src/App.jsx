@@ -11,87 +11,49 @@ import Cactus from './components/Cactus';
 import Cloud from './components/Cloud';
 import Bird from './components/Bird';
 
-
 function App() {
-
   const [obstacles, setObstacles] = useState([]);
   const [clouds, setClouds] = useState([]);
-
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-
   const [gameSpeed, setGameSpeed] = useState(17);
-
   const [isCrouching, setIsCrouching] = useState(false);
-
   const [dinoReset, setDinoReset] = useState(0);
-
   const [darkMode, setDarkMode] = useState(false);
-
   const [soundEnabled, setSoundEnabled] = useState(true);
-
   const [colorMode, setColorMode] = useState(false);
-
   const [weather, setWeather] = useState('clear');
-
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const obstacleId = useRef(0);
   const cloudId = useRef(0);
-
   const recentPatterns = useRef([]);
-
   const scoreRef = useRef(0);
-
   const spawnTimer = useRef(0);
-
   const audioContextRef = useRef(null);
 
-
-  /* ========================================
-     SOUND
-  ======================================== */
-
   function getAudioContext() {
-
     if (!audioContextRef.current) {
-
       audioContextRef.current =
         new (
           window.AudioContext ||
           window.webkitAudioContext
         )();
-
     }
 
     return audioContextRef.current;
-
   }
 
-
   function playDeathSound() {
+    if (!soundEnabled) return;
 
-    if (!soundEnabled) {
+    const audioContext = getAudioContext();
 
-      return;
-
-    }
-
-
-    const audioContext =
-      getAudioContext();
-
-
-    if (
-      audioContext.state === 'suspended'
-    ) {
-
+    if (audioContext.state === 'suspended') {
       audioContext.resume();
-
     }
-
 
     const oscillator =
       audioContext.createOscillator();
@@ -99,89 +61,91 @@ function App() {
     const gain =
       audioContext.createGain();
 
-
     oscillator.type = 'square';
-
 
     oscillator.frequency.setValueAtTime(
       220,
       audioContext.currentTime
     );
 
-
     oscillator.frequency.exponentialRampToValueAtTime(
       80,
       audioContext.currentTime + 0.35
     );
-
 
     gain.gain.setValueAtTime(
       0.12,
       audioContext.currentTime
     );
 
-
     gain.gain.exponentialRampToValueAtTime(
       0.001,
       audioContext.currentTime + 0.35
     );
 
-
     oscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
+    gain.connect(audioContext.destination);
 
     oscillator.start();
-
 
     oscillator.stop(
       audioContext.currentTime + 0.35
     );
-
   }
-
-
-  /* ========================================
-     WEATHER
-  ======================================== */
 
   function cycleWeather() {
-
-    setWeather(
-      (currentWeather) => {
-
-        if (currentWeather === 'clear') {
-
-          return 'rain';
-
-        }
-
-        if (currentWeather === 'rain') {
-
-          return 'sunny';
-
-        }
-
-        return 'clear';
-
+    setWeather((currentWeather) => {
+      if (currentWeather === 'clear') {
+        return 'rain';
       }
-    );
 
+      if (currentWeather === 'rain') {
+        return 'sunny';
+      }
+
+      return 'clear';
+    });
   }
 
+  async function toggleFullscreen() {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (error) {
+      console.error(
+        'Fullscreen error:',
+        error
+      );
+    }
+  }
 
-  /* ========================================
-     CREATE OBSTACLE PATTERN
-  ======================================== */
+  useEffect(() => {
+    function handleFullscreenChange() {
+      setIsFullscreen(
+        Boolean(document.fullscreenElement)
+      );
+    }
+
+    document.addEventListener(
+      'fullscreenchange',
+      handleFullscreenChange
+    );
+
+    return () => {
+      document.removeEventListener(
+        'fullscreenchange',
+        handleFullscreenChange
+      );
+    };
+  }, []);
 
   function createPattern(
     startX,
     currentScore
   ) {
-
     const singleCactus = () => [
       {
         id: obstacleId.current++,
@@ -190,21 +154,18 @@ function App() {
       },
     ];
 
-
     const doubleCactus = () => [
       {
         id: obstacleId.current++,
         type: 'cactus',
         position: startX,
       },
-
       {
         id: obstacleId.current++,
         type: 'cactus',
         position: startX + 36,
       },
     ];
-
 
     const tripleCactus = () => [
       {
@@ -212,20 +173,17 @@ function App() {
         type: 'cactus',
         position: startX,
       },
-
       {
         id: obstacleId.current++,
         type: 'cactus',
         position: startX + 36,
       },
-
       {
         id: obstacleId.current++,
         type: 'cactus',
         position: startX + 72,
       },
     ];
-
 
     const highBird = () => [
       {
@@ -236,7 +194,6 @@ function App() {
       },
     ];
 
-
     const lowBird = () => [
       {
         id: obstacleId.current++,
@@ -246,14 +203,12 @@ function App() {
       },
     ];
 
-
     const cactusThenBird = () => [
       {
         id: obstacleId.current++,
         type: 'cactus',
         position: startX,
       },
-
       {
         id: obstacleId.current++,
         type: 'bird',
@@ -262,16 +217,9 @@ function App() {
       },
     ];
 
-
     let patterns;
 
-
-    /* ========================================
-       0 - 100
-    ======================================== */
-
     if (currentScore < 100) {
-
       patterns = [
         'singleCactus',
         'singleCactus',
@@ -279,16 +227,7 @@ function App() {
         'singleCactus',
         'doubleCactus',
       ];
-
-    }
-
-
-    /* ========================================
-       100 - 200
-    ======================================== */
-
-    else if (currentScore < 200) {
-
+    } else if (currentScore < 200) {
       patterns = [
         'singleCactus',
         'singleCactus',
@@ -296,16 +235,7 @@ function App() {
         'doubleCactus',
         'highBird',
       ];
-
-    }
-
-
-    /* ========================================
-       200 - 300
-    ======================================== */
-
-    else if (currentScore < 300) {
-
+    } else if (currentScore < 300) {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -314,16 +244,7 @@ function App() {
         'highBird',
         'lowBird',
       ];
-
-    }
-
-
-    /* ========================================
-       300 - 500
-    ======================================== */
-
-    else if (currentScore < 500) {
-
+    } else if (currentScore < 500) {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -334,16 +255,7 @@ function App() {
         'lowBird',
         'cactusThenBird',
       ];
-
-    }
-
-
-    /* ========================================
-       500 - 700
-    ======================================== */
-
-    else if (currentScore < 700) {
-
+    } else if (currentScore < 700) {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -354,16 +266,7 @@ function App() {
         'lowBird',
         'cactusThenBird',
       ];
-
-    }
-
-
-    /* ========================================
-       700 - 850
-    ======================================== */
-
-    else if (currentScore < 850) {
-
+    } else if (currentScore < 850) {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -375,16 +278,7 @@ function App() {
         'lowBird',
         'cactusThenBird',
       ];
-
-    }
-
-
-    /* ========================================
-       850 - 1000
-    ======================================== */
-
-    else if (currentScore < 1000) {
-
+    } else if (currentScore < 1000) {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -396,16 +290,7 @@ function App() {
         'lowBird',
         'cactusThenBird',
       ];
-
-    }
-
-
-    /* ========================================
-       1000+
-    ======================================== */
-
-    else {
-
+    } else {
       patterns = [
         'singleCactus',
         'doubleCactus',
@@ -418,13 +303,7 @@ function App() {
         'cactusThenBird',
         'cactusThenBird',
       ];
-
     }
-
-
-    /* ========================================
-       AVOID IMMEDIATE REPEATS
-    ======================================== */
 
     let availablePatterns =
       patterns.filter(
@@ -434,41 +313,27 @@ function App() {
           )
       );
 
-
-    if (
-      availablePatterns.length === 0
-    ) {
-
+    if (availablePatterns.length === 0) {
       availablePatterns = patterns;
-
     }
-
 
     const patternName =
       availablePatterns[
         Math.floor(
           Math.random() *
-          availablePatterns.length
+            availablePatterns.length
         )
       ];
-
 
     recentPatterns.current.push(
       patternName
     );
 
-
-    if (
-      recentPatterns.current.length > 2
-    ) {
-
+    if (recentPatterns.current.length > 2) {
       recentPatterns.current.shift();
-
     }
 
-
     switch (patternName) {
-
       case 'doubleCactus':
         return doubleCactus();
 
@@ -486,232 +351,126 @@ function App() {
 
       default:
         return singleCactus();
-
     }
-
   }
-
-
-  /* ========================================
-     CREATE CLOUD
-  ======================================== */
 
   function createCloud(startX) {
-
     return {
-
       id: cloudId.current++,
-
       position: startX,
-
-      top:
-        40 +
-        Math.random() * 100,
-
+      top: 40 + Math.random() * 100,
     };
-
   }
 
-
-  /* ========================================
-     START / RESTART GAME
-  ======================================== */
-
   function setupGame() {
-
     obstacleId.current = 0;
-
     cloudId.current = 0;
-
     recentPatterns.current = [];
-
     scoreRef.current = 0;
-
     spawnTimer.current = 0;
 
-
     setDinoReset(
-      (current) =>
-        current + 1
+      (current) => current + 1
     );
-
 
     const startingObstacles = [];
 
     let startX = 1000;
 
-
-    for (
-      let i = 0;
-      i < 3;
-      i++
-    ) {
-
-      const pattern =
-        createPattern(
-          startX,
-          0
-        );
-
+    for (let i = 0; i < 3; i++) {
+      const pattern = createPattern(
+        startX,
+        0
+      );
 
       startingObstacles.push(
         ...pattern
       );
 
-
       startX += 900;
-
     }
-
 
     const startingClouds = [];
 
-
-    for (
-      let i = 0;
-      i < 7;
-      i++
-    ) {
-
+    for (let i = 0; i < 7; i++) {
       startingClouds.push(
         createCloud(
           100 +
-          i * 180 +
-          Math.random() * 150
+            i * 180 +
+            Math.random() * 150
         )
       );
-
     }
 
-
-    setObstacles(
-      startingObstacles
-    );
-
-    setClouds(
-      startingClouds
-    );
-
+    setObstacles(startingObstacles);
+    setClouds(startingClouds);
     setScore(0);
-
     setGameSpeed(17);
-
     setIsCrouching(false);
-
     setGameOver(false);
-
     setGameStarted(true);
-
   }
 
-
-  /* ========================================
-     INITIAL PAGE LOAD
-  ======================================== */
-
   useEffect(() => {
-
     setObstacles([]);
-
     setClouds([]);
-
     setScore(0);
-
     setHighScore(0);
-
     setGameSpeed(17);
-
     setGameOver(false);
-
     setIsCrouching(false);
-
     setGameStarted(false);
-
   }, []);
 
-
-  /* ========================================
-     SCORE REF
-  ======================================== */
-
   useEffect(() => {
-
     scoreRef.current = score;
-
   }, [score]);
 
-
-  /* ========================================
-     KEYBOARD CONTROLS
-  ======================================== */
-
   useEffect(() => {
-
     function handleKeyDown(event) {
-
       if (
         event.code === 'Space' ||
         event.code === 'ArrowUp' ||
         event.code === 'ArrowDown'
       ) {
-
         event.preventDefault();
-
       }
-
 
       if (
         event.code === 'Enter' &&
         !gameStarted &&
         !gameOver
       ) {
-
         setupGame();
-
         return;
-
       }
-
 
       if (
         event.code === 'Enter' &&
         gameOver
       ) {
-
         setupGame();
-
         return;
-
       }
-
 
       if (
         event.code === 'ArrowDown' &&
         gameStarted &&
         !gameOver
       ) {
-
         setIsCrouching(true);
-
       }
-
     }
-
 
     function handleKeyUp(event) {
-
       if (
         event.code === 'ArrowDown' &&
         gameStarted &&
         !gameOver
       ) {
-
         setIsCrouching(false);
-
       }
-
     }
-
 
     window.addEventListener(
       'keydown',
@@ -723,9 +482,7 @@ function App() {
       handleKeyUp
     );
 
-
     return () => {
-
       window.removeEventListener(
         'keydown',
         handleKeyDown
@@ -735,589 +492,340 @@ function App() {
         'keyup',
         handleKeyUp
       );
-
     };
-
   }, [
     gameStarted,
     gameOver,
   ]);
 
-
-  /* ========================================
-     GAME SPEED
-  ======================================== */
-
   useEffect(() => {
-
-    if (!gameStarted) {
-
-      return;
-
-    }
-
+    if (!gameStarted) return;
 
     const newSpeed =
-      17 +
-      score * 0.015;
-
+      17 + score * 0.015;
 
     setGameSpeed(
-      Math.min(
-        newSpeed,
-        30
-      )
+      Math.min(newSpeed, 30)
     );
-
   }, [
     score,
     gameStarted,
   ]);
 
-
-  /* ========================================
-     MOVE OBSTACLES
-  ======================================== */
-
   useEffect(() => {
-
     if (
       !gameStarted ||
       gameOver
     ) {
-
       return;
-
     }
 
+    const movement = setInterval(() => {
+      setObstacles(
+        (currentObstacles) =>
+          currentObstacles
+            .map((obstacle) => ({
+              ...obstacle,
 
-    const movement =
-      setInterval(() => {
-
-        setObstacles(
-          (currentObstacles) =>
-
-            currentObstacles
-              .map(
-                (obstacle) => ({
-
-                  ...obstacle,
-
-                  position:
-                    obstacle.position -
-                    gameSpeed * 0.53,
-
-                })
-              )
-
-              .filter(
-                (obstacle) =>
-                  obstacle.position > -120
-              )
-
-        );
-
-      }, 16);
-
-
-    return () => {
-
-      clearInterval(
-        movement
+              position:
+                obstacle.position -
+                gameSpeed * 0.53,
+            }))
+            .filter(
+              (obstacle) =>
+                obstacle.position > -120
+            )
       );
+    }, 16);
 
-    };
-
+    return () =>
+      clearInterval(movement);
   }, [
     gameStarted,
     gameOver,
     gameSpeed,
   ]);
 
-
-  /* ========================================
-     SPAWN OBSTACLES
-  ======================================== */
-
   useEffect(() => {
-
     if (
       !gameStarted ||
       gameOver
     ) {
-
       return;
-
     }
-
 
     spawnTimer.current = 0;
 
+    const spawn = setInterval(() => {
+      spawnTimer.current += 50;
 
-    const spawn =
-      setInterval(() => {
+      const currentScore =
+        scoreRef.current;
 
-        spawnTimer.current += 50;
+      let spawnDelay;
 
+      if (currentScore < 100) {
+        spawnDelay = 2400;
+      } else if (currentScore < 200) {
+        spawnDelay = 2100;
+      } else if (currentScore < 300) {
+        spawnDelay = 1600;
+      } else if (currentScore < 500) {
+        spawnDelay = 1450;
+      } else if (currentScore < 600) {
+        spawnDelay = 1250;
+      } else if (currentScore < 700) {
+        spawnDelay = 1150;
+      } else if (currentScore < 800) {
+        spawnDelay = 1050;
+      } else if (currentScore < 900) {
+        spawnDelay = 950;
+      } else if (currentScore < 1000) {
+        spawnDelay = 875;
+      } else if (currentScore < 1200) {
+        spawnDelay = 800;
+      } else if (currentScore < 1500) {
+        spawnDelay = 750;
+      } else {
+        spawnDelay = 700;
+      }
 
-        const currentScore =
-          scoreRef.current;
+      if (
+        spawnTimer.current >=
+        spawnDelay
+      ) {
+        spawnTimer.current = 0;
 
-
-        let spawnDelay;
-
-
-        if (currentScore < 100) {
-
-          spawnDelay = 2400;
-
-        }
-
-        else if (currentScore < 200) {
-
-          spawnDelay = 2100;
-
-        }
-
-        else if (currentScore < 300) {
-
-          spawnDelay = 1600;
-
-        }
-
-        else if (currentScore < 500) {
-
-          spawnDelay = 1450;
-
-        }
-
-        else if (currentScore < 600) {
-
-          spawnDelay = 1250;
-
-        }
-
-        else if (currentScore < 700) {
-
-          spawnDelay = 1150;
-
-        }
-
-        else if (currentScore < 800) {
-
-          spawnDelay = 1050;
-
-        }
-
-        else if (currentScore < 900) {
-
-          spawnDelay = 950;
-
-        }
-
-        else if (currentScore < 1000) {
-
-          spawnDelay = 875;
-
-        }
-
-        else if (currentScore < 1200) {
-
-          spawnDelay = 800;
-
-        }
-
-        else if (currentScore < 1500) {
-
-          spawnDelay = 750;
-
-        }
-
-        else {
-
-          spawnDelay = 700;
-
-        }
-
-
-        if (
-          spawnTimer.current >=
-          spawnDelay
-        ) {
-
-          spawnTimer.current = 0;
-
-
-          const newPattern =
-            createPattern(
-              1050,
-              currentScore
-            );
-
-
-          setObstacles(
-            (currentObstacles) => [
-
-              ...currentObstacles,
-
-              ...newPattern,
-
-            ]
+        const newPattern =
+          createPattern(
+            1050,
+            currentScore
           );
 
-        }
+        setObstacles(
+          (currentObstacles) => [
+            ...currentObstacles,
+            ...newPattern,
+          ]
+        );
+      }
+    }, 50);
 
-      }, 50);
-
-
-    return () => {
-
+    return () =>
       clearInterval(spawn);
-
-    };
-
   }, [
     gameStarted,
     gameOver,
   ]);
 
-
-  /* ========================================
-     CLOUD MOVEMENT
-  ======================================== */
-
   useEffect(() => {
-
     if (
       !gameStarted ||
       gameOver
     ) {
-
       return;
-
     }
-
 
     const cloudMovement =
       setInterval(() => {
-
         setClouds(
           (currentClouds) => {
-
             let updatedClouds =
               currentClouds
+                .map((cloud) => ({
+                  ...cloud,
 
-                .map(
-                  (cloud) => ({
-
-                    ...cloud,
-
-                    position:
-                      cloud.position -
-                      gameSpeed *
+                  position:
+                    cloud.position -
+                    gameSpeed *
                       0.18 *
                       0.53,
-
-                  })
-                )
-
+                }))
                 .filter(
                   (cloud) =>
-                    cloud.position > -120
+                    cloud.position >
+                    -120
                 );
-
 
             const furthestCloud =
               updatedClouds.length > 0
-
                 ? Math.max(
                     ...updatedClouds.map(
                       (cloud) =>
                         cloud.position
                     )
                   )
-
                 : 0;
-
 
             if (
               furthestCloud < 760
             ) {
-
               const numberOfClouds =
                 1 +
                 Math.floor(
                   Math.random() * 2
                 );
 
-
               for (
                 let i = 0;
                 i < numberOfClouds;
                 i++
               ) {
-
                 updatedClouds.push(
                   createCloud(
-                    1000 +
-                    i * 120
+                    1000 + i * 120
                   )
                 );
-
               }
-
             }
 
-
             return updatedClouds;
-
           }
         );
-
       }, 16);
 
-
-    return () => {
-
+    return () =>
       clearInterval(
         cloudMovement
       );
-
-    };
-
   }, [
     gameStarted,
     gameOver,
     gameSpeed,
   ]);
 
-
-  /* ========================================
-     SCORE
-  ======================================== */
-
   useEffect(() => {
-
     if (
       !gameStarted ||
       gameOver
     ) {
-
       return;
-
     }
-
 
     const scoreTimer =
       setInterval(() => {
-
         setScore(
           (currentScore) =>
             currentScore + 1
         );
-
       }, 100);
 
-
-    return () => {
-
-      clearInterval(
-        scoreTimer
-      );
-
-    };
-
+    return () =>
+      clearInterval(scoreTimer);
   }, [
     gameStarted,
     gameOver,
   ]);
 
-
-  /* ========================================
-     HIGH SCORE
-  ======================================== */
-
   useEffect(() => {
-
-    if (
-      score > highScore
-    ) {
-
+    if (score > highScore) {
       setHighScore(score);
-
     }
-
   }, [
     score,
     highScore,
   ]);
 
-
-  /* ========================================
-     DEATH SOUND
-  ======================================== */
-
   useEffect(() => {
-
     if (gameOver) {
-
       playDeathSound();
-
     }
-
   }, [gameOver]);
 
-
-  /* ========================================
-     COLLISION
-  ======================================== */
-
   useEffect(() => {
-
     if (
       !gameStarted ||
       gameOver
     ) {
-
       return;
-
     }
-
 
     const collisionCheck =
       setInterval(() => {
-
         const dino =
           document.querySelector(
             '.dino'
           );
 
-
-        if (!dino) {
-
-          return;
-
-        }
-
+        if (!dino) return;
 
         const dinoRect =
           dino.getBoundingClientRect();
-
 
         const obstaclesOnScreen =
           document.querySelectorAll(
             '.cactus, .bird'
           );
 
-
         obstaclesOnScreen.forEach(
           (obstacle) => {
-
             const obstacleRect =
               obstacle.getBoundingClientRect();
-
 
             const dinoPaddingX =
               isCrouching
                 ? 20
                 : 18;
 
-
             const dinoPaddingY =
               isCrouching
                 ? 18
                 : 12;
 
-
             const obstaclePaddingX = 3;
-
             const obstaclePaddingY = 3;
 
-
             const horizontalCollision =
-
               dinoRect.right -
                 dinoPaddingX >
-
                 obstacleRect.left +
-                  obstaclePaddingX
-
-              &&
-
+                  obstaclePaddingX &&
               dinoRect.left +
                 dinoPaddingX <
-
                 obstacleRect.right -
                   obstaclePaddingX;
 
-
             const verticalCollision =
-
               dinoRect.bottom -
                 dinoPaddingY >
-
                 obstacleRect.top +
-                  obstaclePaddingY
-
-              &&
-
+                  obstaclePaddingY &&
               dinoRect.top +
                 dinoPaddingY <
-
                 obstacleRect.bottom -
                   obstaclePaddingY;
-
 
             if (
               horizontalCollision &&
               verticalCollision
             ) {
-
               setGameOver(true);
-
             }
-
           }
         );
-
       }, 10);
 
-
-    return () => {
-
+    return () =>
       clearInterval(
         collisionCheck
       );
-
-    };
-
   }, [
     gameStarted,
     gameOver,
     isCrouching,
   ]);
 
-
-  /* ========================================
-     RENDER
-  ======================================== */
-
   return (
-
     <div
       className={`
         page
         ${darkMode ? 'dark-mode' : ''}
         ${colorMode ? 'color-mode' : ''}
         ${gameOver ? 'game-over-active' : ''}
+        ${isFullscreen ? 'fullscreen-active' : ''}
         weather-${weather}
       `}
     >
-
-
-      {/* ========================================
-          HEADER
-      ======================================== */}
 
       <header className="game-header">
 
@@ -1325,27 +833,15 @@ function App() {
           Dinosaur Game - Chrome
         </h1>
 
-
         <p className="controls">
-
-          <span>
-            SPACE / ↑
-          </span>
-
+          <span>SPACE / ↑</span>
           {' '}
           Jump
-
           {'   '}
-
-          <span>
-            ↓
-          </span>
-
+          <span>↓</span>
           {' '}
           Crouch
-
         </p>
-
 
         <button
           type="button"
@@ -1359,111 +855,94 @@ function App() {
             )
           }
         >
-
           {darkMode
             ? '☀ LIGHT'
             : '☾ DARK'}
-
         </button>
 
       </header>
 
 
-      {/* ========================================
-          GAME
-      ======================================== */}
-
       <main className="game-container">
 
         <div className="game">
 
+          {/* WEATHER ONLY APPEARS AFTER START */}
 
-          {/* WEATHER */}
+          {gameStarted &&
+            weather === 'sunny' && (
+              <div className="sun">
+                <div className="sun-rays"></div>
+              </div>
+            )}
 
-          {weather === 'sunny' && (
+          {gameStarted &&
+            weather === 'rain' && (
+              <div className="rain-layer">
 
-            <div className="sun">
+                {Array.from({
+                  length: 70,
+                }).map(
+                  (_, index) => (
+                    <span
+                      key={index}
+                      className="rain-drop"
+                      style={{
+                        left: `${
+                          (index * 37) %
+                          100
+                        }%`,
 
-              <div className="sun-rays"></div>
+                        animationDelay: `${
+                          (index * 0.13) %
+                          1.5
+                        }s`,
 
-            </div>
+                        animationDuration: `${
+                          0.55 +
+                          ((index * 7) %
+                            5) *
+                            0.1
+                        }s`,
+                      }}
+                    />
+                  )
+                )}
 
-          )}
+              </div>
+            )}
 
+          {gameStarted &&
+            weather !== 'sunny' && (
+              <div className="cloud-layer">
 
-          {weather === 'rain' && (
+                {clouds.map(
+                  (cloud) => (
+                    <Cloud
+                      key={cloud.id}
+                      position={
+                        cloud.position
+                      }
+                      top={cloud.top}
+                    />
+                  )
+                )}
 
-            <div className="rain-layer">
+              </div>
+            )}
 
-              {Array.from({
-                length: 70,
-              }).map(
-                (_, index) => (
-
-                  <span
-                    key={index}
-                    className="rain-drop"
-                    style={{
-                      left:
-                        `${(index * 37) % 100}%`,
-
-                      animationDelay:
-                        `${(index * 0.13) % 1.5}s`,
-
-                      animationDuration:
-                        `${0.55 + ((index * 7) % 5) * 0.1}s`,
-                    }}
-                  />
-
-                )
-              )}
-
-            </div>
-
-          )}
-
-
-          {/* CLOUDS */}
-
-          {weather !== 'sunny' && (
-
-            <div className="cloud-layer">
-
-              {clouds.map(
-                (cloud) => (
-
-                  <Cloud
-                    key={cloud.id}
-                    position={cloud.position}
-                    top={cloud.top}
-                  />
-
-                )
-              )}
-
-            </div>
-
-          )}
-
-
-          {/* SCORE */}
 
           <div className="score">
 
             HI{' '}
-
-            {String(
-              highScore
-            ).padStart(
+            {String(highScore).padStart(
               5,
               '0'
             )}
 
             {' '}
 
-            {String(
-              score
-            ).padStart(
+            {String(score).padStart(
               5,
               '0'
             )}
@@ -1471,22 +950,22 @@ function App() {
           </div>
 
 
-          {/* DINO */}
-
           {gameStarted && (
-
             <Dino
               gameOver={gameOver}
-              isCrouching={isCrouching}
+              isCrouching={
+                isCrouching
+              }
               reset={dinoReset}
-              soundEnabled={soundEnabled}
-              getAudioContext={getAudioContext}
+              soundEnabled={
+                soundEnabled
+              }
+              getAudioContext={
+                getAudioContext
+              }
             />
-
           )}
 
-
-          {/* OBSTACLES */}
 
           {obstacles.map(
             (obstacle) => {
@@ -1495,54 +974,47 @@ function App() {
                 obstacle.type ===
                 'cactus'
               ) {
-
                 return (
-
                   <Cactus
                     key={obstacle.id}
-                    position={obstacle.position}
+                    position={
+                      obstacle.position
+                    }
                   />
-
                 );
-
               }
-
 
               if (
                 obstacle.type ===
                 'bird'
               ) {
-
                 return (
-
                   <Bird
                     key={obstacle.id}
-                    position={obstacle.position}
-                    top={obstacle.height}
-                    gameOver={gameOver}
+                    position={
+                      obstacle.position
+                    }
+                    top={
+                      obstacle.height
+                    }
+                    gameOver={
+                      gameOver
+                    }
                   />
-
                 );
-
               }
 
-
               return null;
-
             }
           )}
 
 
-          {/* START SCREEN */}
-
           {!gameStarted && (
-
             <div className="start-screen">
 
               <div className="start-title">
                 DINO RUN
               </div>
-
 
               <button
                 className="start-button"
@@ -1551,26 +1023,20 @@ function App() {
                 START
               </button>
 
-
               <div className="start-hint">
                 PRESS ENTER TO START
               </div>
 
             </div>
-
           )}
 
 
-          {/* GAME OVER */}
-
           {gameOver && (
-
             <div className="game-over">
 
               <div className="game-over-title">
                 GAME OVER
               </div>
-
 
               <button
                 className="restart-button"
@@ -1579,35 +1045,22 @@ function App() {
                 RESTART
               </button>
 
-
               <div className="restart-hint">
                 PRESS ENTER TO RESTART
               </div>
 
             </div>
-
           )}
 
 
-          {/* GROUND */}
-
           {gameStarted && (
-
             <div className="ground"></div>
-
           )}
 
         </div>
 
 
-        {/* ========================================
-            GAME CONTROLS
-        ======================================== */}
-
         <div className="game-controls">
-
-
-          {/* SOUND */}
 
           <button
             type="button"
@@ -1621,15 +1074,11 @@ function App() {
               )
             }
           >
-
             {soundEnabled
               ? '🔊 SOUND ON'
               : '🔇 MUTED'}
-
           </button>
 
-
-          {/* COLOR */}
 
           <button
             type="button"
@@ -1643,15 +1092,11 @@ function App() {
               )
             }
           >
-
             {colorMode
               ? '🌑 CLASSIC'
               : '🎨 COLOR'}
-
           </button>
 
-
-          {/* WEATHER */}
 
           <button
             type="button"
@@ -1661,25 +1106,167 @@ function App() {
             }}
             onClick={cycleWeather}
           >
-
             {weather === 'clear'
               ? '☁️ CLEAR'
               : weather === 'rain'
                 ? '🌧️ RAIN'
                 : '☀️ SUNNY'}
-
           </button>
 
+
+          <button
+            type="button"
+            className="fullscreen-button"
+            onMouseDown={(event) => {
+              event.preventDefault();
+            }}
+            onClick={
+              toggleFullscreen
+            }
+          >
+            {isFullscreen
+              ? '⛶ EXIT FULLSCREEN'
+              : '⛶ FULLSCREEN'}
+          </button>
+
+        </div>
+
+
+        {/* ========================================
+            ABOUT THE GAME
+        ======================================== */}
+
+        <div className="game-info">
+
+          <h2>
+            ABOUT DINO RUN
+          </h2>
+
+          <p className="game-info-intro">
+            Welcome to{' '}
+            <strong>Dino Run</strong>
+            {' '}— a custom endless runner
+            built from scratch with React
+            and JavaScript.
+          </p>
+
+
+          <div className="game-info-grid">
+
+            <div className="game-info-item">
+
+              <h3>
+                RUN & SURVIVE
+              </h3>
+
+              <p>
+                Run as far as you can while
+                avoiding cacti and flying birds.
+                The longer you survive, the
+                higher your score gets.
+              </p>
+
+            </div>
+
+
+            <div className="game-info-item">
+
+              <h3>
+                GET FASTER
+              </h3>
+
+              <p>
+                The game gradually increases
+                in speed as your score grows,
+                making each run more challenging
+                than the last.
+              </p>
+
+            </div>
+
+
+            <div className="game-info-item">
+
+              <h3>
+                CONTROLS
+              </h3>
+
+              <p>
+                Press SPACE or ↑ to jump.
+                Hold ↓ to crouch underneath
+                flying obstacles and react to
+                what's coming next.
+              </p>
+
+            </div>
+
+
+            <div className="game-info-item">
+
+              <h3>
+                CUSTOMIZE
+              </h3>
+
+              <p>
+                Switch between Classic and Color
+                modes, change the weather, toggle
+                sounds, use Dark Mode, or play
+                in Fullscreen.
+              </p>
+
+            </div>
+
+
+            <div className="game-info-item">
+
+              <h3>
+                HIGH SCORE
+              </h3>
+
+              <p>
+                Your current score and best score
+                are displayed above the game.
+                Keep playing and try to beat
+                your personal record.
+              </p>
+
+            </div>
+
+
+            <div className="game-info-item">
+
+              <h3>
+                DYNAMIC WORLD
+              </h3>
+
+              <p>
+                Clouds move across the sky while
+                different weather conditions
+                create rain or bring out the sun
+                during your run.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div className="game-info-footer">
+
+            <p>
+              Built as a personal coding project
+              to practice React, JavaScript, CSS,
+              animations, game logic, and UI design.
+            </p>
+
+          </div>
 
         </div>
 
       </main>
 
     </div>
-
   );
-
 }
-
 
 export default App;
