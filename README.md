@@ -5,6 +5,7 @@ A Chrome Dinosaur-inspired endless runner built from scratch with React, JavaScr
 ## Features ₊˚⊹ 𐂯
 
 - Jump and crouch controls
+- Touch controls for phones and tablets
 - Cacti and flying bird obstacles
 - Increasing game speed and difficulty
 - Score and high score tracking
@@ -18,13 +19,14 @@ A Chrome Dinosaur-inspired endless runner built from scratch with React, JavaScr
 - Fullscreen mode
 - English, Spanish, and Russian language support
 - Custom dinosaur and game visuals
-- Responsive game interface
+- Responsive interface for desktop, phones, and tablets
 
 ## Controls ⋆˚꩜｡
 
 - `Space` / `↑` — Jump
 - `↓` — Crouch
 - `Enter` — Start / Restart
+- `Touch` — Tap to jump, swipe down to crouch
 
 ## Built With ᯓ★
 
