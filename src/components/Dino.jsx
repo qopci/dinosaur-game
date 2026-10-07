@@ -1,96 +1,249 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-function Dino({ gameOver }) {
+
+function Dino({
+  gameOver,
+  isCrouching,
+  reset,
+}) {
+
   const [isJumping, setIsJumping] = useState(false);
   const [jumpHeight, setJumpHeight] = useState(0);
 
+  const isJumpingRef = useRef(false);
+
+
+  /* ========================================
+     JUMP CONTROLS
+  ======================================== */
+
   useEffect(() => {
+
     function handleKeyDown(event) {
+
       if (
-        (
-          event.code === 'Space' ||
-          event.code === 'ArrowUp'
-        ) &&
-        !isJumping &&
-        !gameOver
+        event.code !== 'Space' &&
+        event.code !== 'ArrowUp'
       ) {
-        setIsJumping(true);
+
+        return;
+
       }
+
+
+      event.preventDefault();
+
+
+      if (
+        isJumpingRef.current ||
+        gameOver
+      ) {
+
+        return;
+
+      }
+
+
+      isJumpingRef.current = true;
+
+      setIsJumping(true);
+
     }
+
 
     window.addEventListener(
       'keydown',
       handleKeyDown
     );
 
+
     return () => {
+
       window.removeEventListener(
         'keydown',
         handleKeyDown
       );
+
     };
-  }, [isJumping, gameOver]);
 
-  /*
-    Jump movement.
+  }, [gameOver]);
 
-    IMPORTANT:
-    When gameOver becomes true, the interval
-    is cleaned up immediately.
 
-    We DO NOT reset jumpHeight here.
-
-    This means the dino stays exactly where
-    it was when the collision happened.
-  */
+  /* ========================================
+     JUMP PHYSICS
+  ======================================== */
 
   useEffect(() => {
-    if (!isJumping || gameOver) return;
 
-    let height = jumpHeight;
-    let velocity = 18;
+    if (
+      !isJumping ||
+      gameOver
+    ) {
 
-    const jump = setInterval(() => {
-      height += velocity;
-      velocity -= 1.1;
+      return;
 
-      if (height <= 0) {
-        height = 0;
+    }
 
-        setJumpHeight(0);
-        setIsJumping(false);
 
-        clearInterval(jump);
-        return;
-      }
+    let height = 0;
 
-      setJumpHeight(height);
-    }, 30);
+    let velocity = 17;
+
+
+    const jump =
+      setInterval(() => {
+
+        height += velocity;
+
+        velocity -= 1.1;
+
+
+        if (height <= 0) {
+
+          height = 0;
+
+
+          setJumpHeight(0);
+
+          setIsJumping(false);
+
+          isJumpingRef.current = false;
+
+
+          clearInterval(jump);
+
+          return;
+
+        }
+
+
+        setJumpHeight(height);
+
+      }, 30);
+
 
     return () => {
-      clearInterval(jump);
-    };
-  }, [isJumping, gameOver]);
 
-  return (
-    <img
-      className={`
-        dino
-        ${
-          isJumping
-            ? 'dino-jumping'
-            : gameOver
+      clearInterval(jump);
+
+    };
+
+  }, [
+    isJumping,
+    gameOver,
+  ]);
+
+
+  /* ========================================
+     STOP JUMPING ON GAME OVER
+  ======================================== */
+
+  useEffect(() => {
+
+    if (gameOver) {
+
+      setIsJumping(false);
+
+      setJumpHeight(0);
+
+      isJumpingRef.current = false;
+
+    }
+
+  }, [
+    gameOver,
+  ]);
+
+
+  /* ========================================
+     RESET DINO POSITION
+  ======================================== */
+
+  useEffect(() => {
+
+    setJumpHeight(0);
+
+    setIsJumping(false);
+
+    isJumpingRef.current = false;
+
+  }, [
+    reset,
+  ]);
+
+
+  /* ========================================
+     NORMAL DINO
+  ======================================== */
+
+  const normalDinoClass = `
+    dino-image
+    ${
+      !isCrouching
+        ? isJumping
+          ? 'dino-jumping'
+          : gameOver
             ? 'dino-stopped'
             : 'dino-running'
-        }
-      `}
-      src="/dino-icon.png"
-      alt="Dinosaur"
+        : 'dino-hidden'
+    }
+  `;
+
+
+  /* ========================================
+     CROUCHING DINO
+  ======================================== */
+
+  const crouchDinoClass = `
+    dino-image
+    dino-crouch-image
+    ${
+      isCrouching
+        ? gameOver
+          ? 'dino-stopped'
+          : 'dino-running'
+        : 'dino-hidden'
+    }
+  `;
+
+
+  /* ========================================
+     RENDER
+  ======================================== */
+
+  return (
+
+    <div
+      className="dino"
       style={{
         bottom: `${33 + jumpHeight}px`,
       }}
-    />
+    >
+
+      <img
+        className={normalDinoClass}
+        src="/dino-icon.png"
+        alt="Dinosaur"
+        draggable="false"
+      />
+
+
+      <img
+        className={crouchDinoClass}
+        src="/dino-crouch.png"
+        alt="Crouching dinosaur"
+        draggable="false"
+      />
+
+    </div>
+
   );
+
 }
+
 
 export default Dino;

@@ -8,10 +8,9 @@ function Bird({
     <div
       className={`
         bird
-        ${
-          gameOver
-            ? 'bird-stopped'
-            : ''
+        ${gameOver
+          ? 'bird-stopped'
+          : ''
         }
       `}
       style={{
