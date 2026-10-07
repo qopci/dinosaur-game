@@ -37,6 +37,7 @@ function App() {
   const touchActive = useRef(false);
   const touchCrouching = useRef(false);
   const touchJumpTimer = useRef(null);
+  const touchRestartBlocked = useRef(false);
 
   const translations = {
     en: {
@@ -301,7 +302,11 @@ function App() {
     };
   }, []);
 
-  function createPattern(startX, currentScore) {
+  function createPattern(
+    startX,
+    currentScore,
+    forcedPattern = null
+  ) {
     const singleCactus = () => [
       {
         id: obstacleId.current++,
@@ -381,10 +386,12 @@ function App() {
         'singleCactus',
         'singleCactus',
         'singleCactus',
+        'singleCactus',
         'doubleCactus',
       ];
     } else if (currentScore < 200) {
       patterns = [
+        'singleCactus',
         'singleCactus',
         'singleCactus',
         'doubleCactus',
@@ -461,36 +468,45 @@ function App() {
       ];
     }
 
-    let availablePatterns = patterns.filter(
-      (pattern) => !recentPatterns.current.includes(pattern)
-    );
+    let patternName = forcedPattern;
 
-    if (availablePatterns.length === 0) {
-      availablePatterns = patterns;
-    }
+    if (!patternName) {
+      let availablePatterns = patterns.filter(
+        (pattern) => !recentPatterns.current.includes(pattern)
+      );
 
-    const patternName =
-      availablePatterns[
-        Math.floor(Math.random() * availablePatterns.length)
-      ];
+      if (availablePatterns.length === 0) {
+        availablePatterns = patterns;
+      }
 
-    recentPatterns.current.push(patternName);
+      patternName =
+        availablePatterns[
+          Math.floor(Math.random() * availablePatterns.length)
+        ];
 
-    if (recentPatterns.current.length > 2) {
-      recentPatterns.current.shift();
+      recentPatterns.current.push(patternName);
+
+      if (recentPatterns.current.length > 2) {
+        recentPatterns.current.shift();
+      }
     }
 
     switch (patternName) {
       case 'doubleCactus':
         return doubleCactus();
+
       case 'tripleCactus':
         return tripleCactus();
+
       case 'highBird':
         return highBird();
+
       case 'lowBird':
         return lowBird();
+
       case 'cactusThenBird':
         return cactusThenBird();
+
       default:
         return singleCactus();
     }
@@ -518,24 +534,54 @@ function App() {
 
     touchActive.current = false;
     touchCrouching.current = false;
+    touchRestartBlocked.current = false;
 
     setDinoReset((current) => current + 1);
 
     const startingObstacles = [];
-    let startX = gameWidthRef.current + 350;
 
+    // More room before the first obstacle.
+    let startX = gameWidthRef.current + 500;
+
+    // First obstacle is always an easy single cactus.
     startingObstacles.push({
       id: obstacleId.current++,
       type: 'cactus',
       position: startX,
     });
 
-    startX += 1200;
+    // Different opening sequence every run.
+    const openingPatterns = [
+      'singleCactus',
+      'doubleCactus',
+      'singleCactus',
+      'highBird',
+    ];
 
-    for (let i = 0; i < 2; i++) {
-      const pattern = createPattern(startX, 0);
+    // Shuffle the opening sequence.
+    for (let i = openingPatterns.length - 1; i > 0; i--) {
+      const randomIndex = Math.floor(
+        Math.random() * (i + 1)
+      );
+
+      [openingPatterns[i], openingPatterns[randomIndex]] = [
+        openingPatterns[randomIndex],
+        openingPatterns[i],
+      ];
+    }
+
+    // More spacing during the beginning of the run.
+    startX += 1400;
+
+    for (let i = 0; i < openingPatterns.length; i++) {
+      const pattern = createPattern(
+        startX,
+        0,
+        openingPatterns[i]
+      );
+
       startingObstacles.push(...pattern);
-      startX += 1200;
+      startX += 1400;
     }
 
     const startingClouds = [];
@@ -587,10 +633,11 @@ function App() {
     }
 
     if (gameOver) {
-      setupGame();
+      touchRestartBlocked.current = true;
       return;
     }
 
+    touchRestartBlocked.current = false;
     touchStartY.current = event.clientY;
     touchActive.current = true;
     touchCrouching.current = false;
@@ -600,7 +647,8 @@ function App() {
         touchActive.current &&
         !touchCrouching.current &&
         gameStarted &&
-        !gameOver
+        !gameOver &&
+        !touchRestartBlocked.current
       ) {
         triggerTouchJump();
       }
@@ -626,11 +674,11 @@ function App() {
       return;
     }
 
+    event.preventDefault();
+
     const deltaY = event.clientY - touchStartY.current;
 
     if (deltaY > 15) {
-      event.preventDefault();
-
       if (touchJumpTimer.current) {
         clearTimeout(touchJumpTimer.current);
         touchJumpTimer.current = null;
@@ -656,7 +704,10 @@ function App() {
       touchJumpTimer.current = null;
     }
 
-    if (touchActive.current) {
+    if (
+      touchActive.current &&
+      !touchRestartBlocked.current
+    ) {
       if (touchCrouching.current) {
         setIsCrouching(false);
       } else if (gameStarted && !gameOver) {
@@ -666,6 +717,7 @@ function App() {
 
     touchActive.current = false;
     touchCrouching.current = false;
+    touchRestartBlocked.current = false;
 
     if (event.currentTarget.releasePointerCapture) {
       try {
@@ -697,6 +749,7 @@ function App() {
 
     touchActive.current = false;
     touchCrouching.current = false;
+    touchRestartBlocked.current = false;
   }
 
   useEffect(() => {
@@ -785,7 +838,7 @@ function App() {
           }))
           .filter((obstacle) => obstacle.position > -120)
       );
-    }, 16);
+    }, window.innerWidth <= 600 ? 20 : 16);
 
     return () => clearInterval(movement);
   }, [gameStarted, gameOver, gameSpeed]);
@@ -874,7 +927,7 @@ function App() {
 
         return updatedClouds;
       });
-    }, 16);
+    }, window.innerWidth <= 600 ? 30 : 16);
 
     return () => clearInterval(cloudMovement);
   }, [gameStarted, gameOver, gameSpeed]);
@@ -936,10 +989,20 @@ function App() {
             obstacleRect.bottom - obstaclePaddingY;
 
         if (horizontalCollision && verticalCollision) {
+          touchActive.current = false;
+          touchCrouching.current = false;
+          touchRestartBlocked.current = true;
+
+          if (touchJumpTimer.current) {
+            clearTimeout(touchJumpTimer.current);
+            touchJumpTimer.current = null;
+          }
+
+          setIsCrouching(false);
           setGameOver(true);
         }
       });
-    }, 10);
+    }, window.innerWidth <= 600 ? 30 : 10);
 
     return () => clearInterval(collisionCheck);
   }, [gameStarted, gameOver, isCrouching]);

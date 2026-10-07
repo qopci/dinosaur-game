@@ -4,6 +4,9 @@
   color: #535353;
   overflow-x: hidden;
   overflow-y: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
@@ -44,6 +47,10 @@
   border: 1px solid #aaa;
   border-radius: 3px;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -72,6 +79,7 @@
   border: 1px solid #d0d0d0;
   border-radius: 4px;
   touch-action: none;
+  -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -421,6 +429,8 @@
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
   white-space: nowrap;
   flex: 0 0 auto;
   transition:
@@ -637,6 +647,9 @@
   font-size: 17px;
   cursor: pointer;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .footer-language button:hover {
@@ -657,6 +670,7 @@
 .footer-credit a {
   color: #9aa0a6;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .footer-credit a:hover {
@@ -1099,17 +1113,9 @@
 }
 
 @media (pointer: coarse) {
-  .color-mode .dino-image,
-  .dark-mode.color-mode .dino-image {
-    filter:
-      brightness(0)
-      saturate(100%)
-      invert(70%)
-      sepia(45%)
-      saturate(1200%)
-      hue-rotate(290deg)
-      brightness(105%)
-      contrast(95%);
+  .fullscreen-button,
+  .weather-button {
+    display: none;
   }
 
   .color-mode .cactus,
