@@ -23,14 +23,30 @@ A Chrome Dinosaur-inspired endless runner built from scratch with React, JavaScr
 
 ## Controls ⋆˚꩜｡
 
-- `Space` / `↑` — Jump
-- `↓` — Crouch
-- `Enter` — Start / Restart
-- `Touch` — Tap to jump, swipe down to crouch
+| Input | Action |
+|---|---|
+| `Space` / `↑` | Jump |
+| `↓` | Crouch |
+| `Enter` | Start / Restart |
+| `Touch` | Tap to jump, swipe down to crouch |
 
 ## Built With ᯓ★
 
-React, JavaScript, HTML, CSS, and Vite.
+- React
+- JavaScript
+- HTML
+- CSS
+- Vite
+
+## Screenshots ✧˖°
+
+### Desktop Gameplay
+
+![Dino Run desktop gameplay](screenshots/dino-gameplay.png)
+
+### Mobile Gameplay
+
+<img src="screenshots/mobile-gameplay.png" alt="Dino Run mobile gameplay" width="250">
 
 ## Purpose .☘︎ ݁˖
 
@@ -38,6 +54,6 @@ This project was created to practice React, JavaScript, CSS, animations, game lo
 
 ## Author 𐙚
 
-Diana Khachaturova
+**Diana Khachaturova**
 
 [GitHub](https://github.com/qopci) · [LinkedIn](https://www.linkedin.com/in/qopci/)
